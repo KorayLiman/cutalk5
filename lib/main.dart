@@ -1,31 +1,33 @@
+import 'package:ctlk2/firebase_options.dart';
 import 'package:ctlk2/pages/LandingPage.dart';
+import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
-  runApp( MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    setPrefs();
-
-    return MaterialApp(
-      title: 'Material App',
-      home:LandingPage()
+    return ChangeNotifierProvider(
+      create: (context) {
+        return UserModel();
+      },
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Cü Talk',
+          home: LandingPage()),
     );
-  }
-
-  setPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getInt("ct") == null) {
-      prefs.setInt("ct", 0);
-    } else {
-      await prefs.setInt("ct", (prefs.getInt("ct")!) + 1);
-    }
-
-    print(prefs.getInt("ct"));
   }
 }
