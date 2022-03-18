@@ -10,7 +10,8 @@ class FireStoreDBService implements DBBase {
     DocumentSnapshot snapshot =
         await _firestore.collection("users").doc(UserID).get();
     Map<String, dynamic> _readUserMap = snapshot.data() as Map<String, dynamic>;
-    CuTalkUser
+    CuTalkUser user = CuTalkUser.FromMap(_readUserMap);
+    return user;
   }
 
   @override
@@ -26,8 +27,28 @@ class FireStoreDBService implements DBBase {
   }
 
   @override
-  Future<bool> UpdateProfilePhoto(String UserID, String NewProfilePhotoURL) {}
+  Future<bool> UpdateProfilePhoto(
+      String UserID, String NewProfilePhotoURL) async {
+    await _firestore
+        .collection("users")
+        .doc(UserID)
+        .update({"ProfileURL": NewProfilePhotoURL});
+    return true;
+  }
 
   @override
-  Future<bool> UpdateUserName(String UserID, String NewUserName) {}
+  Future<bool> UpdateUserName(String UserID, String NewUserName) async {
+    QuerySnapshot users = await _firestore
+        .collection("users")
+        .where("UserName", isEqualTo: NewUserName)
+        .get();
+    if (users.docs.length > 0) {
+      await _firestore
+          .collection("users")
+          .doc(UserID)
+          .update({"UserName": NewUserName});
+      return true;
+    }
+    return false;
+  }
 }

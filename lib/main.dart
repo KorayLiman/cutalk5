@@ -1,4 +1,5 @@
 import 'package:ctlk2/firebase_options.dart';
+import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/pages/LandingPage.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
