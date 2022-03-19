@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ctlk2/models/user.dart';
+import 'package:ctlk2/pages/GeneralPage.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +32,16 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _textEditingController3 = TextEditingController();
   final TextEditingController _textEditingController4 = TextEditingController();
   final TextEditingController _textEditingController5 = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController1.dispose();
+     _textEditingController2.dispose();
+      _textEditingController3.dispose();
+       _textEditingController4.dispose();
+        _textEditingController5.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Gerçersiz mail";
                     } else {}
                   },
+                  style: TextStyle(color: Colors.white),
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
@@ -154,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Şifre 6 haneden büyük olmalı";
                     } else {}
                   },
+                  style: TextStyle(color: Colors.white),
                   obscureText: true,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
@@ -311,6 +327,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "İsim 3 karakterden küçük olamaz";
                     }
                   },
+                  style: TextStyle(color: Colors.white),
                   controller: _textEditingController3,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
@@ -352,6 +369,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Gerçersiz mail";
                     } else {}
                   },
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.email,
@@ -390,6 +408,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Şifre 6 haneden büyük olmalı";
                     } else {}
                   },
+                  style: TextStyle(color: Colors.white),
                   obscureText: true,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
@@ -520,6 +539,12 @@ class _LoginPageState extends State<LoginPage> {
           try {
             CuTalkUser? LoggedInUser =
                 await _userModel.signinwithEmailAndPassword(email!, password!);
+            Route route = Platform.isIOS
+                ? CupertinoPageRoute(builder: ((context) => GeneralPage()))
+                : MaterialPageRoute(
+                    builder: (context) => GeneralPage(),
+                  );
+            Navigator.pushAndRemoveUntil(context, route, (route) => false);
           } catch (error) {
             PlatformSensitiveAlertDialog(
                     title: "Kullanıcı Bulunamadı",
@@ -544,9 +569,24 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           try {
             CuTalkUser? RegisteredUser = await _userModel
-                .createUserWithEmailandPassword(email!, password!);
+                .createUserWithEmailandPassword(name!, email!, password!);
+            Route route = Platform.isIOS
+                ? CupertinoPageRoute(builder: ((context) => GeneralPage()))
+                : MaterialPageRoute(
+                    builder: (context) => GeneralPage(),
+                  );
+            Navigator.pushAndRemoveUntil(context, route, (route) => false);
           } catch (error) {
             print(error);
+            print(error);
+
+            print(error);
+            print(error);
+            print(error);
+            print(error);
+            print(error);
+            print(error);
+
             PlatformSensitiveAlertDialog(
                     title: "Hata",
                     content: "Mail kullanılıyor",

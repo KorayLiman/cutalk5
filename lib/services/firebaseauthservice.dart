@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/authbase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,10 +7,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   @override
-  Future<CuTalkUser?> createUserWithEmailandPassword(String email, String pw) async{
+  Future<CuTalkUser?> createUserWithEmailandPassword(
+      String name, String email, String pw) async {
     UserCredential credential = await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: pw);
-      return _userFromFirebase(credential.user);
+        .createUserWithEmailAndPassword(email: email, password: pw);
+    return await _userFromFirebase(credential.user);
   }
 
   @override
@@ -37,11 +39,11 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<CuTalkUser?> signinwithEmailAndPassword(
-      String email, String password) async{
-         UserCredential credential = await _firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
-      return _userFromFirebase(credential.user);
-      }
+      String email, String password) async {
+    UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    return await _userFromFirebase(credential.user);
+  }
 
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
@@ -52,16 +54,18 @@ class FirebaseAuthService implements AuthBase {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-     UserCredential crd =
+    UserCredential crd =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    return _userFromFirebase(crd.user);
+    return await _userFromFirebase(crd.user);
   }
 
-  CuTalkUser? _userFromFirebase(User? user) {
+  Future<CuTalkUser?> _userFromFirebase(User? user) async {
     if (user == null) {
       return null;
+    } else {
+      
+      return CuTalkUser(
+          UserID: user.uid, Email: user.email ?? "",);
     }
-    return CuTalkUser(
-        //UserID: user.uid, Email: user.email ?? "", UserName: user.displayName!);
   }
 }

@@ -17,7 +17,10 @@ class FireStoreDBService implements DBBase {
   @override
   Future<bool> SaveUser(CuTalkUser user) async {
     await _firestore.collection("users").doc(user.UserID).set(user.ToMap());
-
+    await _firestore
+        .collection("users")
+        .doc(user.UserID)
+        .set({"UserName": user.UserName}, SetOptions(merge: true));
     DocumentSnapshot snapshot =
         await _firestore.collection("users").doc(user.UserID).get();
     Map<String, dynamic> ReadUserInformation =

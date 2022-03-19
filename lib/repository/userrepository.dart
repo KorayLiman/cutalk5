@@ -14,11 +14,12 @@ class UserRepository implements AuthBase {
   List<CuTalkUser> allUserList = [];
 
   @override
-  Future<CuTalkUser?> createUserWithEmailandPassword(
+  Future<CuTalkUser?> createUserWithEmailandPassword(String name,
       String email, String pw) async {
     CuTalkUser? user =
-        await _firebaseAuthService.createUserWithEmailandPassword(email, pw);
-    bool result = await _fireStoreDBService.SaveUser(user!);
+        await _firebaseAuthService.createUserWithEmailandPassword(name,email, pw);
+    user!.UserName = name;
+    bool result = await _fireStoreDBService.SaveUser(user);
     if (result) {
       return await _fireStoreDBService.ReadUser(user.UserID);
     } else {

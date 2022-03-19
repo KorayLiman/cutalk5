@@ -5,5 +5,5 @@ abstract class AuthBase {
   Future<CuTalkUser?> signinwithGoogle();
   Future<bool> signOut();
   Future<CuTalkUser?> signinwithEmailAndPassword(String email, String password);
-  Future<CuTalkUser?> createUserWithEmailandPassword(String email, String pw);
+  Future<CuTalkUser?> createUserWithEmailandPassword(String name,String email, String pw);
 }
