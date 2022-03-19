@@ -26,7 +26,7 @@ class UserModel with ChangeNotifier implements AuthBase {
 
   @override
   Future<CuTalkUser?> createUserWithEmailandPassword(
-      String email, String pw) async {
+      String email, String pw,) async {
     try {
       viewstate = ViewState.busy;
       _user = await _userRepository.createUserWithEmailandPassword(email, pw);

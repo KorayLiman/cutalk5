@@ -62,6 +62,6 @@ class FirebaseAuthService implements AuthBase {
       return null;
     }
     return CuTalkUser(
-        UserID: user.uid, Email: user.email ?? "", UserName: user.displayName!);
+        //UserID: user.uid, Email: user.email ?? "", UserName: user.displayName!);
   }
 }

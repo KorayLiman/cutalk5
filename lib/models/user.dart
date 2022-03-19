@@ -1,7 +1,7 @@
 class CuTalkUser {
   final String UserID;
   String Email;
-  String UserName;
+  //String UserName;
   String? ProfileURL;
   CuTalkUser({
     required this.UserID,
