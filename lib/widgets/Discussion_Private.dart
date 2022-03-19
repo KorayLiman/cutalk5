@@ -1,8 +1,11 @@
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
+import 'package:gradient_ui_widgets/progress_indicator/gradient_progress_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -51,8 +54,96 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
           decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
+          child: FutureBuilder<List<Chat>>(
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: GradientCircularProgressIndicator(
+                      valueGradient: LinearGradient(colors: [
+                    Color.fromRGBO(240, 43, 17, 1),
+                    Color.fromRGBO(244, 171, 25, 1)
+                  ])),
+                );
+              } else {
+                var allChats = snapshot.data!;
+                return RefreshIndicator(
+                  onRefresh: () {
+                    return OnRefresh();
+                  },
+                  child: ListView.builder(
+                    itemExtent: 70,
+                    itemBuilder: (context, index) {
+                      var CurrentChat = allChats[index];
+                      return ListTile(
+                        onLongPress: () {
+                          if (CurrentChat.OwnerId == _usermodel.user!.UserID) {
+                            PlatformSensitiveDeleteButton(
+                              title: "Sil",
+                              content: "Sohbeti silmek istiyor musunuz?",
+                              mainButtonText: "Evet",
+                              secondaryButtonText: "Hayır",
+                            ).show(context);
+                          }
+                        },
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.tealAccent,
+                          backgroundImage:
+                              NetworkImage(CurrentChat.OwnerProfileUrl),
+                        ),
+                        title: Text(
+                          CurrentChat.OwnerName,
+                          maxLines: 1,
+                          style: GoogleFonts.ubuntu(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: CurrentChat.OwnerEmail ==
+                                    "2020123170@cumhuriyet.edu.tr"
+                                ? Colors.orange
+                                : Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                          CurrentChat.Content,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.ubuntu(
+                              color: CurrentChat.OwnerEmail ==
+                                      "2020123170@cumhuriyet.edu.tr"
+                                  ? Colors.orange
+                                  : Colors.black),
+                        ),
+                        trailing: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            children: [
+                              Icon(Icons.message),
+                              Text(CurrentChat.CommentCount.toString())
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: snapshot.data!.length,
+                  ),
+                );
+              }
+            },
+            future: GetChats(),
+          ),
         ),
       ),
     );
+  }
+
+  Future<List<Chat>> GetChats() async {
+    final _chatmodel = Provider.of<ChatModel>(context, listen: false);
+    return await _chatmodel.GetAllChats(true);
+  }
+
+  Future<void> OnRefresh() async {
+    final _usermodel = Provider.of<UserModel>(context, listen: false);
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {});
+    _usermodel.signOut();
   }
 }

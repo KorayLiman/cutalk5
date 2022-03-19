@@ -128,7 +128,24 @@ class _GeneralPageState extends State<GeneralPage>
           ),
           TabBarView(
             controller: _tabController,
-            children: [DiscussionGeneral(), DiscussionPrivate(), Scaffold()],
+            children: [
+              DiscussionGeneral(),
+              DiscussionPrivate(),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 140.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height - 140,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(50))),
+                  ),
+                ),
+              )
+            ],
           )
         ],
       ),

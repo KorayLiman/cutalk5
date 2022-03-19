@@ -4,6 +4,7 @@ import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -26,12 +27,14 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
             Chat ch = Chat(
                 OwnerName: _usermodel.user!.UserName!,
                 OwnerEmail: _usermodel.user!.Email,
-                Content: "qqweqweqewe",
+                Content:
+                    "qqweqweqewedwqdddddddddddddddddddddddddddddddddddddfasffffdddddddddddddddddddddddddddddddddddddddddddfffffffffffff",
                 OwnerId: _usermodel.user!.UserID,
-                ChatID: _usermodel.user!.UserName.toString() +
-                    Uuid().v4().toString(),
+                ChatID: _usermodel.user!.UserName.toString() + Uuid().v4().toString(),
                 OwnerProfileUrl: _usermodel.user!.ProfileURL!,
                 IsPrivate: false,
+                ViewCount: 0,
+                CommentCount: 0,
                 Comments: <String>["hello"]);
             _chatmodel.SaveChat(ch);
             setState(() {});
@@ -72,41 +75,53 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                     itemBuilder: (context, index) {
                       var CurrentChat = allChats[index];
                       return ListTile(
-                          onLongPress: () {
-                            if (CurrentChat.OwnerId ==
-                                _usermodel.user!.UserID) {
-                              PlatformSensitiveDeleteButton(
-                                title: "Sil",
-                                content: "Sohbeti silmek istiyor musunuz?",
-                                mainButtonText: "Evet",
-                                secondaryButtonText: "Hayır",
-                              ).show(context);
-                            }
-                          },
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.tealAccent,
-                            backgroundImage:
-                                NetworkImage(CurrentChat.OwnerProfileUrl),
+                        onLongPress: () {
+                          if (CurrentChat.OwnerId == _usermodel.user!.UserID) {
+                            PlatformSensitiveDeleteButton(
+                              title: "Sil",
+                              content: "Sohbeti silmek istiyor musunuz?",
+                              mainButtonText: "Evet",
+                              secondaryButtonText: "Hayır",
+                            ).show(context);
+                          }
+                        },
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.tealAccent,
+                          backgroundImage:
+                              NetworkImage(CurrentChat.OwnerProfileUrl),
+                        ),
+                        title: Text(
+                          CurrentChat.OwnerName,
+                          maxLines: 1,
+                          style: GoogleFonts.ubuntu(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            color: CurrentChat.OwnerEmail ==
+                                    "2020123170@cumhuriyet.edu.tr"
+                                ? Colors.orange
+                                : Colors.black,
                           ),
-                          title: Text(
-                            CurrentChat.OwnerName,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: CurrentChat.OwnerEmail ==
-                                        "2020123170@cumhuriyet.edu.tr"
-                                    ? Colors.orange
-                                    : Colors.black),
+                        ),
+                        subtitle: Text(
+                          CurrentChat.Content,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.ubuntu(
+                              color: CurrentChat.OwnerEmail ==
+                                      "2020123170@cumhuriyet.edu.tr"
+                                  ? Colors.orange
+                                  : Colors.black),
+                        ),
+                        trailing: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            children: [
+                              Icon(Icons.message),
+                              Text(CurrentChat.CommentCount.toString())
+                            ],
                           ),
-                          subtitle: Text(
-                            CurrentChat.Content,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: CurrentChat.OwnerEmail ==
-                                        "2020123170@cumhuriyet.edu.tr"
-                                    ? Colors.orange
-                                    : Colors.black),
-                          ));
+                        ),
+                      );
                     },
                     itemCount: snapshot.data!.length,
                   ),
