@@ -63,9 +63,15 @@ class FirebaseAuthService implements AuthBase {
     if (user == null) {
       return null;
     } else {
-      
+      bool IsFromUniversity = false;
+      if (user.email!.contains("@cumhuriyet.edu.tr")) {
+        IsFromUniversity = true;
+      }
       return CuTalkUser(
-          UserID: user.uid, Email: user.email ?? "",);
+          UserID: user.uid,
+          Email: user.email!,
+          UserName: user.displayName ?? null,
+          IsFromUniversity: IsFromUniversity ? true:false);
     }
   }
 }

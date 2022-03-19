@@ -1,3 +1,5 @@
+import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Discussion_General.dart';
 import 'package:ctlk2/widgets/Discussion_Private.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class GeneralPage extends StatefulWidget {
   const GeneralPage({Key? key}) : super(key: key);
@@ -20,7 +23,7 @@ class _GeneralPageState extends State<GeneralPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       _HandleTabSelection();
     });
@@ -33,17 +36,8 @@ class _GeneralPageState extends State<GeneralPage>
   @override
   Widget build(BuildContext context) {
     final _usermodel = Provider.of<UserModel>(context);
+    final _chatmodel = Provider.of<ChatModel>(context);
     return Scaffold(
-      floatingActionButton: GradientFloatingActionButton.extended(
-          onPressed: () {
-            CreateChat();
-          },
-          label: const Text("Sohbet oluştur"),
-          icon: Icon(Icons.message),
-          gradient: LinearGradient(colors: [
-            Color.fromRGBO(240, 43, 17, 1),
-            Color.fromRGBO(244, 171, 25, 1)
-          ])),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -88,7 +82,7 @@ class _GeneralPageState extends State<GeneralPage>
                   Padding(
                     padding: const EdgeInsets.only(left: 12.0),
                     child: Container(
-                      width: MediaQuery.of(context).size.width / 2.3,
+                      width: MediaQuery.of(context).size.width / 1.5,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -134,7 +128,7 @@ class _GeneralPageState extends State<GeneralPage>
           ),
           TabBarView(
             controller: _tabController,
-            children: [DiscussionGeneral(), DiscussionPrivate()],
+            children: [DiscussionGeneral(), DiscussionPrivate(), Scaffold()],
           )
         ],
       ),
@@ -159,7 +153,17 @@ class _GeneralPageState extends State<GeneralPage>
                 icon: Icon(Icons.chat,
                     color: _tabController.index == 1
                         ? Colors.blue.shade900
-                        : Colors.grey))
+                        : Colors.grey)),
+            Tab(
+              child: const Text(
+                "Profil",
+              ),
+              iconMargin: EdgeInsets.all(0),
+              icon: Icon(Icons.supervised_user_circle,
+                  color: _tabController.index == 2
+                      ? Colors.blue.shade900
+                      : Colors.grey),
+            ),
           ]),
     );
   }

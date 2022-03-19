@@ -4,6 +4,7 @@ import 'package:ctlk2/services/authbase.dart';
 import 'package:ctlk2/services/firebase_storage_service.dart';
 import 'package:ctlk2/services/firebaseauthservice.dart';
 import 'package:ctlk2/services/firestore_db_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserRepository implements AuthBase {
   FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
@@ -14,10 +15,10 @@ class UserRepository implements AuthBase {
   List<CuTalkUser> allUserList = [];
 
   @override
-  Future<CuTalkUser?> createUserWithEmailandPassword(String name,
-      String email, String pw) async {
-    CuTalkUser? user =
-        await _firebaseAuthService.createUserWithEmailandPassword(name,email, pw);
+  Future<CuTalkUser?> createUserWithEmailandPassword(
+      String name, String email, String pw) async {
+    CuTalkUser? user = await _firebaseAuthService
+        .createUserWithEmailandPassword(name, email, pw);
     user!.UserName = name;
     bool result = await _fireStoreDBService.SaveUser(user);
     if (result) {
@@ -53,6 +54,7 @@ class UserRepository implements AuthBase {
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
     CuTalkUser? user = await _firebaseAuthService.signinwithGoogle();
+   
     bool result = await _fireStoreDBService.SaveUser(user!);
     if (result) {
       return await _fireStoreDBService.ReadUser(user.UserID);

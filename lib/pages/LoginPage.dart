@@ -37,10 +37,10 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     super.dispose();
     _textEditingController1.dispose();
-     _textEditingController2.dispose();
-      _textEditingController3.dispose();
-       _textEditingController4.dispose();
-        _textEditingController5.dispose();
+    _textEditingController2.dispose();
+    _textEditingController3.dispose();
+    _textEditingController4.dispose();
+    _textEditingController5.dispose();
   }
 
   @override
@@ -83,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget CreateFormLogin() {
+    final _usermodel = Provider.of<UserModel>(context);
     return Stack(
       children: [
         Container(
@@ -253,11 +254,17 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundImage:
                           AssetImage("assets/images/facebook_64px.png"),
                     ),
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundImage: AssetImage("assets/images/google.png"),
-                      backgroundColor: Colors.white,
-                    ),
+                    IconButton(
+                        iconSize: 48,
+                        onPressed: () {
+                          _usermodel.signinwithGoogle();
+                        },
+                        icon: CircleAvatar(
+                          radius: 64,
+                          backgroundImage:
+                              AssetImage("assets/images/google.png"),
+                          backgroundColor: Colors.white,
+                        ))
                   ],
                 ),
               ),
@@ -282,6 +289,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget CreateFormSignUp() {
+    final _usermodel = Provider.of<UserModel>(context);
     return Stack(
       children: [
         Container(
@@ -492,11 +500,17 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundImage:
                           AssetImage("assets/images/facebook_64px.png"),
                     ),
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundImage: AssetImage("assets/images/google.png"),
-                      backgroundColor: Colors.white,
-                    ),
+                    IconButton(
+                        iconSize: 48,
+                        onPressed: () {
+                          _usermodel.signinwithGoogle();
+                        },
+                        icon: CircleAvatar(
+                          radius: 64,
+                          backgroundImage:
+                              AssetImage("assets/images/google.png"),
+                          backgroundColor: Colors.white,
+                        ))
                   ],
                 ),
               ),

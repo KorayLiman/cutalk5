@@ -1,6 +1,7 @@
 import 'package:ctlk2/firebase_options.dart';
 import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/pages/LandingPage.dart';
+import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) {
-        return UserModel();
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) {
+            return UserModel();
+          },
+        ),
+        ChangeNotifierProvider(create: (context) {
+          return ChatModel();
+        })
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Cü Talk',

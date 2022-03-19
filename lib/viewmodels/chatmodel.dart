@@ -1,17 +1,37 @@
 import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/repository/chatrepository.dart';
 import 'package:ctlk2/services/dbbase.dart';
-import 'package:ctlk2/services/firestore_db_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
-class ChatRepository implements DBBase {
-  FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
+class ChatModel with ChangeNotifier implements DBBase {
+  ChatRepository _chatRepository = locator<ChatRepository>();
+  late Chat _chat;
+
+  Chat? get chat => _chat;
+ 
+
+/*CuTalkUser? _user;
+  String? emailerrormessage;
+  String? passworderrormessage;
+
+  ViewState get viewstate => _viewState;
+  CuTalkUser? get user => _user;
+  set viewstate(ViewState value) {
+    _viewState = value;
+    notifyListeners();
+  }
+
+  UserModel() {
+    currentUser();
+  } */
 
   @override
   Future<Chat> GetChat(String ChatID) async {
-    Chat chat = await _fireStoreDBService.GetChat(ChatID);
-    return chat;
+    _chat = await _chatRepository.GetChat(ChatID);
+    return _chat;
   }
 
   @override
@@ -22,11 +42,12 @@ class ChatRepository implements DBBase {
 
   @override
   Future<bool> SaveChat(Chat chat) async {
-    return await _fireStoreDBService.SaveChat(chat);
+    await _chatRepository.SaveChat(chat);
+    return true;
   }
 
   @override
-  Future<bool> SaveUser(CuTalkUser user) {
+  Future<bool> SaveUser(CuTalkUser user,) {
     // TODO: implement SaveUser
     throw UnimplementedError();
   }
@@ -45,9 +66,11 @@ class ChatRepository implements DBBase {
 
   @override
   Future<List<Chat>> GetAllChats(bool IsUniversityChat) async {
-    List<Chat> ChatList = await _fireStoreDBService.GetAllChats(IsUniversityChat);
-    return ChatList;
+    return await _chatRepository.GetAllChats(IsUniversityChat);
   }
 
-  
+  @override
+  Future<Chat> currentChat(String ChatID) async {
+    return await _chatRepository.GetChat(ChatID);
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/dbbase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreDBService implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -15,14 +17,15 @@ class FireStoreDBService implements DBBase {
   }
 
   @override
-  Future<bool> SaveUser(CuTalkUser user) async {
-    await _firestore.collection("users").doc(user.UserID).set(user.ToMap());
+  Future<bool> SaveUser(CuTalkUser Cuuser) async {
+    await _firestore.collection("users").doc(Cuuser.UserID).set(Cuuser.ToMap());
     await _firestore
         .collection("users")
-        .doc(user.UserID)
-        .set({"UserName": user.UserName}, SetOptions(merge: true));
+        .doc(Cuuser.UserID)
+        .set({"UserName": Cuuser.UserName}, SetOptions(merge: true));
+
     DocumentSnapshot snapshot =
-        await _firestore.collection("users").doc(user.UserID).get();
+        await _firestore.collection("users").doc(Cuuser.UserID).get();
     Map<String, dynamic> ReadUserInformation =
         snapshot.data() as Map<String, dynamic>;
     CuTalkUser ReadUserObject = CuTalkUser.FromMap(ReadUserInformation);
@@ -53,5 +56,46 @@ class FireStoreDBService implements DBBase {
       return true;
     }
     return false;
+  }
+
+  @override
+  Future<Chat> GetChat(String ChatID) async {
+    //  DocumentSnapshot snapshot =
+    //       await _firestore.collection("users").doc(UserID).get();
+    //   Map<String, dynamic> _readUserMap = snapshot.data() as Map<String, dynamic>;
+    //   CuTalkUser user = CuTalkUser.FromMap(_readUserMap);
+    //   return user;
+
+    DocumentSnapshot snapshot =
+        await _firestore.collection("chats").doc(ChatID).get();
+    Map<String, dynamic> _ReadChatMap = snapshot.data() as Map<String, dynamic>;
+    Chat chat = Chat.fromMap(_ReadChatMap);
+    return chat;
+  }
+
+  @override
+  Future<bool> SaveChat(Chat chat) async {
+    await _firestore.collection("chats").doc(chat.ChatID).set(chat.toMap());
+    DocumentSnapshot documentSnapshot =
+        await _firestore.collection("chats").doc(chat.ChatID).get();
+    Map<String, dynamic> ReadChatInformation =
+        documentSnapshot.data() as Map<String, dynamic>;
+    Chat ChatObject = Chat.fromMap(ReadChatInformation);
+    return true;
+  }
+
+  @override
+  Future<List<Chat>> GetAllChats(bool IsUniversityChat) async {
+    List<Chat> ChatList = [];
+    QuerySnapshot snapshot = await _firestore
+        .collection("chats")
+        .where("IsPrivate", isEqualTo: IsUniversityChat)
+        .orderBy("PostedAt", descending: true)
+        .get();
+    for (var chat in snapshot.docs) {
+      Chat ch = Chat.fromMap(chat.data() as Map<String, dynamic>);
+      ChatList.add(ch);
+    }
+    return ChatList;
   }
 }

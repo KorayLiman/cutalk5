@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ctlk2/models/user.dart';
 
 class Chat {
-  final String OwnerID;
+  final String OwnerName;
+  final String OwnerEmail;
+  final String OwnerId;
+  final String ChatID;
   final String OwnerProfileUrl;
   final String Content;
   List<String>? Comments;
@@ -13,8 +15,11 @@ class Chat {
 
   Chat(
       {required this.Content,
+      required this.ChatID,
+      required this.OwnerId,
       required this.OwnerProfileUrl,
-      required this.OwnerID,
+      required this.OwnerName,
+      required this.OwnerEmail,
       this.Comments,
       this.CommentCount,
       this.PostedAt,
@@ -23,24 +28,30 @@ class Chat {
 
   Map<String, dynamic> toMap() {
     return {
-      "OwnerID": OwnerID,
+      "OwnerId": OwnerId,
+      "UserName": OwnerName,
+      "Email": OwnerEmail,
       "OwnerProfileUrl": OwnerProfileUrl,
       "Content": Content,
       "Comments": Comments ?? <String>[],
       "PostedAt": PostedAt ?? FieldValue.serverTimestamp(),
       "ViewCount": ViewCount ?? 0,
       "CommentCount": CommentCount ?? 0,
-      "IsPrivate": IsPrivate
+      "IsPrivate": IsPrivate,
+      "ChatID": ChatID
     };
   }
 
   Chat.fromMap(Map<String, dynamic> map)
-      : OwnerID = map["OwnerID"],
+      : OwnerName = map["UserName"],
+        OwnerId = map["OwnerId"],
+        OwnerEmail = map["Email"],
         OwnerProfileUrl = map["OwnerProfileUrl"],
         Content = map["Content"],
-        Comments = map["Comments"],
+        Comments = map["Comments"].cast<String>(),
         PostedAt = map["PostedAt"],
         ViewCount = map["ViewCount"],
         CommentCount = map["CommentCount"],
-        IsPrivate = map["IsPrivate"];
+        IsPrivate = map["IsPrivate"],
+        ChatID = map["ChatID"];
 }

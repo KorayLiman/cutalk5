@@ -46,8 +46,8 @@ class _WelcomePageState extends State<WelcomePage>
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                Color.fromRGBO(191, 71, 72, 1),
-                Color.fromRGBO(73, 1, 72, 1)
+                Color.fromRGBO(88, 117, 251, 1),
+              Color.fromRGBO(122, 150, 255, 1)
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter))),
           Column(
             children: [
