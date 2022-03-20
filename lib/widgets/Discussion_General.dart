@@ -123,6 +123,10 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                   "2020123170@cumhuriyet.edu.tr") {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
+                              chat: CurrentChat,
+                              callback: (){setState(() {
+                                
+                              });},
                               content: "Sohbeti silmek istiyor musunuz?",
                               mainButtonText: "Evet",
                               secondaryButtonText: "Hayır",

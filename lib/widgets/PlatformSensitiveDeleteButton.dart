@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,13 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
   final String content;
   final String mainButtonText;
   final String secondaryButtonText;
+  final Chat chat;
+  VoidCallback callback;
 
   PlatformSensitiveDeleteButton(
       {required this.title,
+      required this.chat,
+      required this.callback,
       required this.content,
       required this.mainButtonText,
       required this.secondaryButtonText});
@@ -45,24 +51,38 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
   List<Widget> _SetDialogButtons(BuildContext context) {
     final AllButtons = <Widget>[];
     if (Platform.isIOS) {
-       AllButtons.add(CupertinoDialogAction(
+      AllButtons.add(CupertinoDialogAction(
           child: Text(secondaryButtonText),
           onPressed: () {
             Navigator.of(context).pop(true);
           }));
       AllButtons.add(CupertinoDialogAction(
         child: Text(mainButtonText),
-        onPressed: () {},
+        onPressed: () {
+          FirebaseFirestore.instance
+              .collection("chats")
+              .doc(chat.ChatID)
+              .delete();
+          callback();
+          Navigator.pop(context);
+        },
       ));
-     
     } else {
       AllButtons.add(TextButton(
           onPressed: () {
             Navigator.of(context).pop(true);
           },
           child: Text(secondaryButtonText)));
-      AllButtons.add(TextButton(onPressed: () {}, child: Text(mainButtonText)));
-      
+      AllButtons.add(TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection("chats")
+                .doc(chat.ChatID)
+                .delete();
+                callback();
+            Navigator.pop(context);
+          },
+          child: Text(mainButtonText)));
     }
     return AllButtons;
   }
