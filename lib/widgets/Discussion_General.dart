@@ -134,7 +134,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                           }
                         },
                         leading: CircleAvatar(
-                          backgroundColor: Colors.tealAccent,
+                          backgroundColor: Colors.transparent,
                           backgroundImage:
                               NetworkImage(CurrentChat.OwnerProfileUrl),
                         ),

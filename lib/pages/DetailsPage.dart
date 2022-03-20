@@ -30,6 +30,7 @@ class _DetailsPageState extends State<DetailsPage> {
     final _chatmodel = Provider.of<ChatModel>(context);
     final _usermodel = Provider.of<UserModel>(context);
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey.shade100,
         extendBodyBehindAppBar: true,
         appBar: AppBar(

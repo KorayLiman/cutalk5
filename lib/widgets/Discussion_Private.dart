@@ -143,7 +143,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                           }
                         },
                         leading: CircleAvatar(
-                          backgroundColor: Colors.tealAccent,
+                          backgroundColor: Colors.transparent,
                           backgroundImage:
                               NetworkImage(CurrentChat.OwnerProfileUrl),
                         ),
