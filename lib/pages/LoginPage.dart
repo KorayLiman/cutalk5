@@ -194,7 +194,9 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.only(right: 18.0),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _usermodel.SendPasswordResetEmail();
+                        },
                         child: Text(
                           "Şifrenizi mi unuttunuz?",
                           style: GoogleFonts.ubuntu(
@@ -552,8 +554,6 @@ class _LoginPageState extends State<LoginPage> {
             mainButtonText: "Tamam",
           ).show(context);
         } else {
-          
-          
           try {
             CuTalkUser? LoggedInUser =
                 await _userModel.signinwithEmailAndPassword(email!, password!);

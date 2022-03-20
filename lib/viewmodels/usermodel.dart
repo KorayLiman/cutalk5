@@ -94,4 +94,6 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
       viewstate = ViewState.idle;
     }
   }
+
+  void SendPasswordResetEmail() {}
 }
