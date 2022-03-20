@@ -2,6 +2,7 @@ import 'package:ctlk2/pages/GeneralPage.dart';
 import 'package:ctlk2/pages/LoginPage.dart';
 import 'package:ctlk2/pages/WelcomeToAppPage.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

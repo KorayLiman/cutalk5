@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(color: Colors.white),
                   obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon:const  Icon(
+                    prefixIcon: const Icon(
                       Icons.password,
                       color: Colors.white,
                     ),
@@ -462,7 +462,8 @@ class _LoginPageState extends State<LoginPage> {
                           GoogleFonts.ubuntu(color: Colors.blue, fontSize: 18),
                     ),
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(const Size(300, 52)),
+                        minimumSize:
+                            MaterialStateProperty.all(const Size(300, 52)),
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -479,7 +480,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-             const  Padding(
+              const Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Text(
@@ -505,7 +506,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           _usermodel.signinwithGoogle();
                         },
-                        icon:const  CircleAvatar(
+                        icon: const CircleAvatar(
                           radius: 64,
                           backgroundImage:
                               AssetImage("assets/images/google.png"),
@@ -517,7 +518,8 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(_bottomtextleft, style: const TextStyle(color: Colors.white)),
+                  Text(_bottomtextleft,
+                      style: const TextStyle(color: Colors.white)),
                   TextButton(
                       onPressed: () => _switch(),
                       child: Text(
@@ -550,6 +552,8 @@ class _LoginPageState extends State<LoginPage> {
             mainButtonText: "Tamam",
           ).show(context);
         } else {
+          
+          
           try {
             CuTalkUser? LoggedInUser =
                 await _userModel.signinwithEmailAndPassword(email!, password!);
@@ -585,7 +589,8 @@ class _LoginPageState extends State<LoginPage> {
             CuTalkUser? RegisteredUser = await _userModel
                 .createUserWithEmailandPassword(name!, email!, password!);
             Route route = Platform.isIOS
-                ? CupertinoPageRoute(builder: ((context) => const GeneralPage()))
+                ? CupertinoPageRoute(
+                    builder: ((context) => const GeneralPage()))
                 : MaterialPageRoute(
                     builder: (context) => const GeneralPage(),
                   );

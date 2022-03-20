@@ -11,6 +11,8 @@ class FirebaseAuthService implements AuthBase {
       String name, String email, String pw) async {
     UserCredential credential = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: pw);
+    await credential.user!.sendEmailVerification();
+
     return await _userFromFirebase(credential.user);
   }
 
@@ -48,12 +50,14 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+    
     UserCredential crd =
         await FirebaseAuth.instance.signInWithCredential(credential);
     return await _userFromFirebase(crd.user);
@@ -71,7 +75,7 @@ class FirebaseAuthService implements AuthBase {
           UserID: user.uid,
           Email: user.email!,
           UserName: user.displayName ?? null,
-          IsFromUniversity: IsFromUniversity ? true:false);
+          IsFromUniversity: IsFromUniversity ? true : false);
     }
   }
 }

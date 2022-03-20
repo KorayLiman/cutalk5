@@ -1,14 +1,15 @@
-import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/pages/Profile_Page.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Discussion_General.dart';
 import 'package:ctlk2/widgets/Discussion_Private.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
+import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class GeneralPage extends StatefulWidget {
   const GeneralPage({Key? key}) : super(key: key);
@@ -36,6 +37,7 @@ class _GeneralPageState extends State<GeneralPage>
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser!.emailVerified == false) {}
     final _usermodel = Provider.of<UserModel>(context);
     final _chatmodel = Provider.of<ChatModel>(context);
     return Scaffold(
@@ -129,11 +131,7 @@ class _GeneralPageState extends State<GeneralPage>
           ),
           TabBarView(
             controller: _tabController,
-            children: [
-              DiscussionGeneral(),
-              DiscussionPrivate(),
-              ProfilePage()
-            ],
+            children: [DiscussionGeneral(), DiscussionPrivate(), ProfilePage()],
           )
         ],
       ),

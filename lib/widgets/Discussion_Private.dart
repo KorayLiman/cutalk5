@@ -4,7 +4,9 @@ import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/pages/DetailsPage.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,7 +41,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
       floatingActionButton: _usermodel.user!.IsFromUniversity
           ? GradientFloatingActionButton.extended(
               onPressed: () {
-                showModalBottomSheet(
+                if(FirebaseAuth.instance.currentUser!.emailVerified){showModalBottomSheet(
                   context: context,
                   builder: (context) {
                     return Container(
@@ -71,7 +73,13 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                     );
                   },
                 );
-                setState(() {});
+                setState(() {});}
+                else{ PlatformSensitiveAlertDialog(
+                title: "Email onayı",
+                content: "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
+                mainButtonText: "Tamam",
+              ).show(context);}
+                
               },
               label: const Text("Sohbet oluştur"),
               icon: const Icon(Icons.message),

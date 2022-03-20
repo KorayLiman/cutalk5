@@ -6,6 +6,7 @@ import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,39 +37,47 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
     return Scaffold(
       floatingActionButton: GradientFloatingActionButton.extended(
           onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: ListTile(
-                    title: TextFormField(
-                      onFieldSubmitted: (value) {
-                        if (value.length > 0) {
-                          Chat ch = Chat(
-                              Content: value,
-                              ChatID: _usermodel.user!.UserName.toString() +
-                                  Uuid().v4().toString(),
-                              OwnerId: _usermodel.user!.UserID,
-                              OwnerProfileUrl: _usermodel.user!.ProfileURL!,
-                              OwnerName: _usermodel.user!.UserName!,
-                              OwnerEmail: _usermodel.user!.Email,
-                              IsPrivate: false);
-                          _chatmodel.SaveChat(ch);
-                          Navigator.pop(context);
-                          ;
-                        }
-                      },
-                      decoration:
-                          InputDecoration(hintText: "Sohbet içeriğinizi yazın"),
-                      autofocus: true,
+            if (FirebaseAuth.instance.currentUser!.emailVerified) {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: ListTile(
+                      title: TextFormField(
+                        onFieldSubmitted: (value) {
+                          if (value.length > 0) {
+                            Chat ch = Chat(
+                                Content: value,
+                                ChatID: _usermodel.user!.UserName.toString() +
+                                    Uuid().v4().toString(),
+                                OwnerId: _usermodel.user!.UserID,
+                                OwnerProfileUrl: _usermodel.user!.ProfileURL!,
+                                OwnerName: _usermodel.user!.UserName!,
+                                OwnerEmail: _usermodel.user!.Email,
+                                IsPrivate: false);
+                            _chatmodel.SaveChat(ch);
+                            Navigator.pop(context);
+                            ;
+                          }
+                        },
+                        decoration: InputDecoration(
+                            hintText: "Sohbet içeriğinizi yazın"),
+                        autofocus: true,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-            setState(() {});
+                  );
+                },
+              );
+              setState(() {});
+            } else {
+              PlatformSensitiveAlertDialog(
+                title: "Email onayı",
+                content: "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
+                mainButtonText: "Tamam",
+              ).show(context);
+            }
           },
           label: const Text("Sohbet oluştur"),
           icon: const Icon(Icons.message),
@@ -101,7 +110,8 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                   onRefresh: () {
                     return OnRefresh();
                   },
-                  child: ListView.builder(padding: EdgeInsets.zero,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemExtent: 80,
                     itemBuilder: (context, index) {
                       var CurrentChat = allChats[index];
@@ -111,10 +121,14 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                               context,
                               isIos
                                   ? CupertinoPageRoute(
-                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                      builder: (context) => DetailsPage(
+                                        chat: CurrentChat,
+                                      ),
                                     )
                                   : MaterialPageRoute(
-                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                      builder: (context) => DetailsPage(
+                                        chat: CurrentChat,
+                                      ),
                                     ));
                         },
                         onLongPress: () {
@@ -124,9 +138,9 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
                               chat: CurrentChat,
-                              callback: (){setState(() {
-                                
-                              });},
+                              callback: () {
+                                setState(() {});
+                              },
                               content: "Sohbeti silmek istiyor musunuz?",
                               mainButtonText: "Evet",
                               secondaryButtonText: "Hayır",

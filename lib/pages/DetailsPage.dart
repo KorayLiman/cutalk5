@@ -5,6 +5,8 @@ import 'package:ctlk2/models/user.dart';
 
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +29,7 @@ class _DetailsPageState extends State<DetailsPage> {
   String? CommentString;
   @override
   Widget build(BuildContext context) {
+    
     final _chatmodel = Provider.of<ChatModel>(context);
     final _usermodel = Provider.of<UserModel>(context);
     return Scaffold(
