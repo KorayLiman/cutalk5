@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/authbase.dart';
@@ -7,9 +9,10 @@ import 'package:ctlk2/services/firestore_db_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserRepository implements AuthBase {
-  FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
-  FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
-  FirebaseStorageService _fireBaseStorageService =
+  final FirebaseAuthService _firebaseAuthService =
+      locator<FirebaseAuthService>();
+  final FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
+  final FirebaseStorageService _fireBaseStorageService =
       locator<FirebaseStorageService>();
 
   List<CuTalkUser> allUserList = [];
@@ -54,12 +57,19 @@ class UserRepository implements AuthBase {
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
     CuTalkUser? user = await _firebaseAuthService.signinwithGoogle();
-   
+
     bool result = await _fireStoreDBService.SaveUser(user!);
     if (result) {
       return await _fireStoreDBService.ReadUser(user.UserID);
     } else {
       return null;
     }
+  }
+
+  Future<String> uploadFile(String userId, String fileType, File? image) async {
+    String ProfilePhotoUrl =
+        await _fireBaseStorageService.uploadFile(userId, fileType, image!);
+    await _fireStoreDBService.UpdateProfilePhoto(userId, ProfilePhotoUrl);
+    return ProfilePhotoUrl;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/pages/Profile_Page.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Discussion_General.dart';
@@ -47,7 +48,7 @@ class _GeneralPageState extends State<GeneralPage>
           child: Column(
         children: [
           UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Color.fromRGBO(88, 117, 251, 1),
                 Color.fromRGBO(122, 150, 255, 1)
@@ -65,7 +66,7 @@ class _GeneralPageState extends State<GeneralPage>
         children: [
           Container(
             height: 260,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(colors: [
               Color.fromRGBO(88, 117, 251, 1),
               Color.fromRGBO(122, 150, 255, 1)
@@ -93,7 +94,7 @@ class _GeneralPageState extends State<GeneralPage>
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
                             _usermodel.user!.Email,
                             style: GoogleFonts.ubuntu(
@@ -131,20 +132,7 @@ class _GeneralPageState extends State<GeneralPage>
             children: [
               DiscussionGeneral(),
               DiscussionPrivate(),
-              Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 140.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 140,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(50))),
-                  ),
-                ),
-              )
+              ProfilePage()
             ],
           )
         ],
@@ -165,7 +153,7 @@ class _GeneralPageState extends State<GeneralPage>
                       : Colors.grey),
             ),
             Tab(
-                iconMargin: EdgeInsets.all(0),
+                iconMargin: const EdgeInsets.all(0),
                 child: const Text("Cü Özel"),
                 icon: Icon(Icons.chat,
                     color: _tabController.index == 1
@@ -175,7 +163,7 @@ class _GeneralPageState extends State<GeneralPage>
               child: const Text(
                 "Profil",
               ),
-              iconMargin: EdgeInsets.all(0),
+              iconMargin: const EdgeInsets.all(0),
               icon: Icon(Icons.supervised_user_circle,
                   color: _tabController.index == 2
                       ? Colors.blue.shade900

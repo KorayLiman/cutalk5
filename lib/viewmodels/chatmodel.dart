@@ -8,10 +8,9 @@ import 'package:flutter/cupertino.dart';
 
 class ChatModel with ChangeNotifier implements DBBase {
   ChatRepository _chatRepository = locator<ChatRepository>();
-  late Chat _chat;
+  Chat? _chat;
 
   Chat? get chat => _chat;
- 
 
 /*CuTalkUser? _user;
   String? emailerrormessage;
@@ -28,10 +27,14 @@ class ChatModel with ChangeNotifier implements DBBase {
     currentUser();
   } */
 
+  // ChatModel(String ChatId) {
+  //   currentChat(ChatId);
+  // }
+
   @override
   Future<Chat> GetChat(String ChatID) async {
     _chat = await _chatRepository.GetChat(ChatID);
-    return _chat;
+    return _chat!;
   }
 
   @override
@@ -47,7 +50,9 @@ class ChatModel with ChangeNotifier implements DBBase {
   }
 
   @override
-  Future<bool> SaveUser(CuTalkUser user,) {
+  Future<bool> SaveUser(
+    CuTalkUser user,
+  ) {
     // TODO: implement SaveUser
     throw UnimplementedError();
   }
@@ -73,4 +78,6 @@ class ChatModel with ChangeNotifier implements DBBase {
   Future<Chat> currentChat(String ChatID) async {
     return await _chatRepository.GetChat(ChatID);
   }
+
+ // Future<List<GetAllComments() async{}
 }

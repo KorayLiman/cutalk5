@@ -16,16 +16,16 @@ class LandingPage extends StatelessWidget {
     final _usermodel = Provider.of<UserModel>(context);
     if (_usermodel.viewstate == ViewState.idle) {
       if (_usermodel.user == null) {
-        return LoginPage();
+        return const LoginPage();
       } else {
-        return GeneralPage();
+        return const GeneralPage();
       }
     } else {
       return Scaffold(
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
             Color.fromRGBO(88, 117, 251, 1),
             Color.fromRGBO(122, 150, 255, 1)
@@ -33,7 +33,7 @@ class LandingPage extends StatelessWidget {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80.0),
                   child: LinearProgressIndicator(

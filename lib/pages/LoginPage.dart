@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
             Color.fromRGBO(57, 138, 229, 1),
             Color.fromRGBO(115, 174, 244, 1)
@@ -130,17 +130,17 @@ class _LoginPageState extends State<LoginPage> {
                       return "Gerçersiz mail";
                     } else {}
                   },
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.email,
                       color: Colors.white,
                     ),
                     fillColor: Colors.white.withOpacity(0.2),
                     filled: true,
                     hintText: "Email'inizi giriniz",
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
@@ -173,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(color: Colors.white),
                   obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon:const  Icon(
                       Icons.password,
                       color: Colors.white,
                     ),
                     fillColor: Colors.white.withOpacity(0.2),
                     filled: true,
                     hintText: "Şifrenizi giriniz",
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Text(
@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Text(
@@ -248,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 24,
                       backgroundColor: Colors.white,
                       backgroundImage:
@@ -259,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           _usermodel.signinwithGoogle();
                         },
-                        icon: CircleAvatar(
+                        icon: const CircleAvatar(
                           radius: 64,
                           backgroundImage:
                               AssetImage("assets/images/google.png"),
@@ -276,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () => _switch(),
                       child: Text(
                         _bottomtextright,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ))
                 ],
@@ -295,7 +295,7 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
             Color.fromRGBO(57, 138, 229, 1),
             Color.fromRGBO(115, 174, 244, 1)
@@ -335,18 +335,18 @@ class _LoginPageState extends State<LoginPage> {
                       return "İsim 3 karakterden küçük olamaz";
                     }
                   },
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _textEditingController3,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email,
+                    prefixIcon: const Icon(
+                      Icons.supervised_user_circle,
                       color: Colors.white,
                     ),
                     fillColor: Colors.white.withOpacity(0.2),
                     filled: true,
                     hintText: "Adınızı giriniz",
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
@@ -377,9 +377,9 @@ class _LoginPageState extends State<LoginPage> {
                       return "Gerçersiz mail";
                     } else {}
                   },
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.email,
                       color: Colors.white,
                     ),
@@ -416,17 +416,17 @@ class _LoginPageState extends State<LoginPage> {
                       return "Şifre 6 haneden büyük olmalı";
                     } else {}
                   },
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.password,
                       color: Colors.white,
                     ),
                     fillColor: Colors.white.withOpacity(0.2),
                     filled: true,
                     hintText: "Şifrenizi giriniz",
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
@@ -462,7 +462,7 @@ class _LoginPageState extends State<LoginPage> {
                           GoogleFonts.ubuntu(color: Colors.blue, fontSize: 18),
                     ),
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(Size(300, 52)),
+                        minimumSize: MaterialStateProperty.all(const Size(300, 52)),
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -470,7 +470,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Text(
@@ -479,7 +479,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Padding(
+             const  Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Text(
@@ -494,7 +494,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 24,
                       backgroundColor: Colors.white,
                       backgroundImage:
@@ -505,7 +505,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           _usermodel.signinwithGoogle();
                         },
-                        icon: CircleAvatar(
+                        icon:const  CircleAvatar(
                           radius: 64,
                           backgroundImage:
                               AssetImage("assets/images/google.png"),
@@ -517,12 +517,12 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(_bottomtextleft, style: TextStyle(color: Colors.white)),
+                  Text(_bottomtextleft, style: const TextStyle(color: Colors.white)),
                   TextButton(
                       onPressed: () => _switch(),
                       child: Text(
                         _bottomtextright,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ))
                 ],
@@ -585,9 +585,9 @@ class _LoginPageState extends State<LoginPage> {
             CuTalkUser? RegisteredUser = await _userModel
                 .createUserWithEmailandPassword(name!, email!, password!);
             Route route = Platform.isIOS
-                ? CupertinoPageRoute(builder: ((context) => GeneralPage()))
+                ? CupertinoPageRoute(builder: ((context) => const GeneralPage()))
                 : MaterialPageRoute(
-                    builder: (context) => GeneralPage(),
+                    builder: (context) => const GeneralPage(),
                   );
             Navigator.pushAndRemoveUntil(context, route, (route) => false);
           } catch (error) {

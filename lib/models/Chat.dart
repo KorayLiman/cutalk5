@@ -7,6 +7,7 @@ class Chat {
   final String ChatID;
   final String OwnerProfileUrl;
   final String Content;
+  List<String>? ChatImageContent;
   List<String>? Comments;
   final Timestamp? PostedAt;
   int? ViewCount;
@@ -16,6 +17,7 @@ class Chat {
   Chat(
       {required this.Content,
       required this.ChatID,
+      this.ChatImageContent,
       required this.OwnerId,
       required this.OwnerProfileUrl,
       required this.OwnerName,
@@ -29,6 +31,7 @@ class Chat {
   Map<String, dynamic> toMap() {
     return {
       "OwnerId": OwnerId,
+      "ChatImageContent": ChatImageContent ?? <String>[],
       "UserName": OwnerName,
       "Email": OwnerEmail,
       "OwnerProfileUrl": OwnerProfileUrl,
@@ -44,6 +47,7 @@ class Chat {
 
   Chat.fromMap(Map<String, dynamic> map)
       : OwnerName = map["UserName"],
+        ChatImageContent = map["ChatImageContent"].cast<String>(),
         OwnerId = map["OwnerId"],
         OwnerEmail = map["Email"],
         OwnerProfileUrl = map["OwnerProfileUrl"],

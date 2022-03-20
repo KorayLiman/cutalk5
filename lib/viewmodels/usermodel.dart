@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/repository/userrepository.dart';
@@ -24,6 +26,11 @@ class UserModel with ChangeNotifier implements AuthBase {
     currentUser();
   }
 
+
+Future<String> uploadFile(String userId, String fileType, File? image) async {
+    var link = await _userRepository.uploadFile(userId, fileType, image);
+    return link;
+  }
   @override
   Future<CuTalkUser?> createUserWithEmailandPassword(
       String name,String email, String pw,) async {

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/pages/DetailsPage.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
@@ -17,6 +21,14 @@ class DiscussionGeneral extends StatefulWidget {
 }
 
 class _DiscussionGeneralState extends State<DiscussionGeneral> {
+  late bool isIos;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isIos = Platform.isIOS ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _chatmodel = Provider.of<ChatModel>(context);
@@ -24,24 +36,43 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
     return Scaffold(
       floatingActionButton: GradientFloatingActionButton.extended(
           onPressed: () {
-            Chat ch = Chat(
-                OwnerName: _usermodel.user!.UserName!,
-                OwnerEmail: _usermodel.user!.Email,
-                Content:
-                    "qqweqweqewedwqdddddddddddddddddddddddddddddddddddddfasffffdddddddddddddddddddddddddddddddddddddddddddfffffffffffff",
-                OwnerId: _usermodel.user!.UserID,
-                ChatID: _usermodel.user!.UserName.toString() + Uuid().v4().toString(),
-                OwnerProfileUrl: _usermodel.user!.ProfileURL!,
-                IsPrivate: false,
-                ViewCount: 0,
-                CommentCount: 0,
-                Comments: <String>["hello"]);
-            _chatmodel.SaveChat(ch);
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: ListTile(
+                    title: TextFormField(
+                      onFieldSubmitted: (value) {
+                        if (value.length > 0) {
+                          Chat ch = Chat(
+                              Content: value,
+                              ChatID: _usermodel.user!.UserName.toString() +
+                                  Uuid().v4().toString(),
+                              OwnerId: _usermodel.user!.UserID,
+                              OwnerProfileUrl: _usermodel.user!.ProfileURL!,
+                              OwnerName: _usermodel.user!.UserName!,
+                              OwnerEmail: _usermodel.user!.Email,
+                              IsPrivate: false);
+                          _chatmodel.SaveChat(ch);
+                          Navigator.pop(context);
+                          ;
+                        }
+                      },
+                      decoration:
+                          InputDecoration(hintText: "Sohbet içeriğinizi yazın"),
+                      autofocus: true,
+                    ),
+                  ),
+                );
+              },
+            );
             setState(() {});
           },
           label: const Text("Sohbet oluştur"),
-          icon: Icon(Icons.message),
-          gradient: LinearGradient(colors: [
+          icon: const Icon(Icons.message),
+          gradient: const LinearGradient(colors: [
             Color.fromRGBO(240, 43, 17, 1),
             Color.fromRGBO(244, 171, 25, 1)
           ])),
@@ -57,7 +88,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
           child: FutureBuilder<List<Chat>>(
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center(
+                return const Center(
                   child: GradientCircularProgressIndicator(
                       valueGradient: LinearGradient(colors: [
                     Color.fromRGBO(240, 43, 17, 1),
@@ -71,12 +102,25 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                     return OnRefresh();
                   },
                   child: ListView.builder(
-                    itemExtent: 70,
+                    itemExtent: 80,
                     itemBuilder: (context, index) {
                       var CurrentChat = allChats[index];
                       return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              isIos
+                                  ? CupertinoPageRoute(
+                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                    )
+                                  : MaterialPageRoute(
+                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                    ));
+                        },
                         onLongPress: () {
-                          if (CurrentChat.OwnerId == _usermodel.user!.UserID) {
+                          if (CurrentChat.OwnerId == _usermodel.user!.UserID ||
+                              _usermodel.user!.Email ==
+                                  "2020123170@cumhuriyet.edu.tr") {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
                               content: "Sohbeti silmek istiyor musunuz?",
@@ -116,7 +160,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Column(
                             children: [
-                              Icon(Icons.message),
+                              const Icon(Icons.message),
                               Text(CurrentChat.CommentCount.toString())
                             ],
                           ),

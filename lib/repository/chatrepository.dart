@@ -6,7 +6,7 @@ import 'package:ctlk2/services/firestore_db_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatRepository implements DBBase {
-  FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
+  final FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
 
   @override
   Future<Chat> GetChat(String ChatID) async {
