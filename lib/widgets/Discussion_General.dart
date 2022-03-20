@@ -101,7 +101,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                   onRefresh: () {
                     return OnRefresh();
                   },
-                  child: ListView.builder(
+                  child: ListView.builder(padding: EdgeInsets.zero,
                     itemExtent: 80,
                     itemBuilder: (context, index) {
                       var CurrentChat = allChats[index];

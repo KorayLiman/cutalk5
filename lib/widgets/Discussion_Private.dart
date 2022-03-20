@@ -105,6 +105,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                     return OnRefresh();
                   },
                   child: ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemExtent: 80,
                     itemBuilder: (context, index) {
                       var CurrentChat = allChats[index];
@@ -114,10 +115,14 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                               context,
                               isIos
                                   ? CupertinoPageRoute(
-                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                      builder: (context) => DetailsPage(
+                                        chat: CurrentChat,
+                                      ),
                                     )
                                   : MaterialPageRoute(
-                                      builder: (context) => DetailsPage(chat: CurrentChat,),
+                                      builder: (context) => DetailsPage(
+                                        chat: CurrentChat,
+                                      ),
                                     ));
                         },
                         onLongPress: () {

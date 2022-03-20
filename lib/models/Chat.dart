@@ -8,7 +8,6 @@ class Chat {
   final String OwnerProfileUrl;
   final String Content;
   List<String>? ChatImageContent;
-  List<String>? Comments;
   final Timestamp? PostedAt;
   int? ViewCount;
   int? CommentCount;
@@ -22,7 +21,7 @@ class Chat {
       required this.OwnerProfileUrl,
       required this.OwnerName,
       required this.OwnerEmail,
-      this.Comments,
+      
       this.CommentCount,
       this.PostedAt,
       this.ViewCount,
@@ -36,7 +35,7 @@ class Chat {
       "Email": OwnerEmail,
       "OwnerProfileUrl": OwnerProfileUrl,
       "Content": Content,
-      "Comments": Comments ?? <String>[],
+      
       "PostedAt": PostedAt ?? FieldValue.serverTimestamp(),
       "ViewCount": ViewCount ?? 0,
       "CommentCount": CommentCount ?? 0,
@@ -52,7 +51,7 @@ class Chat {
         OwnerEmail = map["Email"],
         OwnerProfileUrl = map["OwnerProfileUrl"],
         Content = map["Content"],
-        Comments = map["Comments"].cast<String>(),
+        
         PostedAt = map["PostedAt"],
         ViewCount = map["ViewCount"],
         CommentCount = map["CommentCount"],

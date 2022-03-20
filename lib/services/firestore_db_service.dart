@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/dbbase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,5 +98,19 @@ class FireStoreDBService implements DBBase {
       ChatList.add(ch);
     }
     return ChatList;
+  }
+
+  Future<List<Comment>> GetAllComments(String chatID) async {
+    List<Comment> list = [];
+    QuerySnapshot docs = await _firestore
+        .collection("comments")
+        .where("BelongingChatID", isEqualTo: chatID).orderBy("SentAt",descending: true)
+        .get();
+    for (var doc in docs.docs) {
+      Comment comment = Comment.fromMap(doc.data() as Map<String, dynamic>);
+      list.add(comment);
+    }
+
+    return list;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ctlk2/locator.dart';
+import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/repository/chatrepository.dart';
@@ -79,5 +80,7 @@ class ChatModel with ChangeNotifier implements DBBase {
     return await _chatRepository.GetChat(ChatID);
   }
 
- // Future<List<GetAllComments() async{}
+  Future<List<Comment>> GetAllComments(String ChatID) async {
+    return await _chatRepository.GetAllComments(ChatID);
+  }
 }

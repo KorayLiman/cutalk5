@@ -1,4 +1,5 @@
 import 'package:ctlk2/locator.dart';
+import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/services/dbbase.dart';
@@ -45,9 +46,12 @@ class ChatRepository implements DBBase {
 
   @override
   Future<List<Chat>> GetAllChats(bool IsUniversityChat) async {
-    List<Chat> ChatList = await _fireStoreDBService.GetAllChats(IsUniversityChat);
+    List<Chat> ChatList =
+        await _fireStoreDBService.GetAllChats(IsUniversityChat);
     return ChatList;
   }
 
-  
+  Future<List<Comment>> GetAllComments(String ChatID) async {
+    return await _fireStoreDBService.GetAllComments(ChatID);
+  }
 }

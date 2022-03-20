@@ -1,11 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/Chat.dart';
+import 'package:ctlk2/models/Comment.dart';
+import 'package:ctlk2/models/user.dart';
+
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -17,6 +23,9 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   final DateFormat formatter = DateFormat('dd/MM/yyyy');
+
+  final TextEditingController _textEditingController = TextEditingController();
+  String? CommentString;
   @override
   Widget build(BuildContext context) {
     final _chatmodel = Provider.of<ChatModel>(context);
@@ -132,8 +141,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
                                   widget.chat.PostedAt == null
                                       ? formatter.format(DateTime.now())
                                       : formatter.format(
@@ -143,7 +152,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                                   .millisecondsSinceEpoch)),
                                   style: GoogleFonts.ubuntu(
                                       color: Colors.grey.shade800),
-                                ),),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Row(
@@ -179,15 +189,130 @@ class _DetailsPageState extends State<DetailsPage> {
                             flex: 5,
                             child: Container(
                               child: SingleChildScrollView(
-                                  // child: FutureBuilder(
-                                  //   builder: (context, snapshot) {},
-                                  //    future: _GetCommentList(),
-                                  // ),
-                                  ),
+                                child: FutureBuilder<List<Comment>>(
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 80.0),
+                                              child: LinearProgressIndicator(
+                                                color: Color.fromRGBO(
+                                                    131, 0, 254, 1),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 80.0),
+                                              child: LinearProgressIndicator(
+                                                color: Color.fromRGBO(
+                                                    219, 0, 254, 1),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder: (context, index) {
+                                          var currentComment =
+                                              snapshot.data![index];
+                                          return ListTile(
+                                            leading: FutureBuilder<
+                                                CuTalkUser>(
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                  );
+                                                } else {
+                                                  return CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    backgroundImage:
+                                                        CachedNetworkImageProvider(snapshot.data!.ProfileURL!)
+                                                  );
+                                                }
+                                              },
+                                              future: _GetCommentOwner(
+                                                  currentComment.OwnerID),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }
+                                  },
+                                  future: _GetCommentList(),
+                                ),
+                              ),
                             ))
                       ],
                     ),
                   )),
+            ),
+            Positioned(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border:
+                        Border.fromBorderSide(BorderSide(color: Colors.grey))),
+                height: 80,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 24.0, right: 8),
+                        child: TextFormField(
+                          controller: _textEditingController,
+                          onChanged: (Value) {
+                            CommentString = Value;
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Yorum yap",
+                              filled: true,
+                              fillColor: Colors.grey.shade300,
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20))),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                        color: const Color.fromRGBO(88, 117, 251, 1),
+                        onPressed: () {
+                          _UploadComment();
+                          Navigator.pop(context);
+                          _textEditingController.clear();
+                          setState(() {});
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          size: 36,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              bottom: 1,
+              left: 0,
+              right: 0,
             )
           ],
         ));
@@ -197,8 +322,42 @@ class _DetailsPageState extends State<DetailsPage> {
     return widget.chat.PostedAt;
   }
 
-  // Future<List> _GetCommentList() async {
-  //   final _chatmodel = Provider.of<ChatModel>(context, listen: false);
-  //   return await _chatmodel.GetAllComments();
-  // }
+  Future<List<Comment>> _GetCommentList() async {
+    final _chatmodel = Provider.of<ChatModel>(context, listen: false);
+    return await _chatmodel.GetAllComments(widget.chat.ChatID);
+  }
+
+  void _UploadComment() async {
+    final _usermodel = Provider.of<UserModel>(context, listen: false);
+
+    if (CommentString != null && CommentString!.length > 0) {
+      try {
+        Comment com = Comment(
+          BelongingChatID: widget.chat.ChatID,
+          Content: CommentString!,
+          OwnerID: _usermodel.user!.UserID,
+        );
+        await FirebaseFirestore.instance
+            .collection("comments")
+            .doc()
+            .set(com.toMap());
+      } catch (error) {
+        print(error.toString());
+      }
+    }
+  }
+
+  
+
+ 
+
+  Future<CuTalkUser> _GetCommentOwner(String OwnerID) async {
+    var doc = await FirebaseFirestore.instance.collection("users");
+    var result = await doc.where("UserID", isEqualTo: OwnerID).get();
+    CuTalkUser? user;
+    for (var m in result.docs) {
+      user = CuTalkUser.FromMap(m.data() as Map<String, dynamic>);
+    }
+    return user!;
+  }
 }
