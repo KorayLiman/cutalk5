@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
+import 'package:ctlk2/pages/FullScreenImage.dart';
 
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +33,6 @@ class _DetailsPageState extends State<DetailsPage> {
   String? CommentString;
   @override
   Widget build(BuildContext context) {
-    
     final _chatmodel = Provider.of<ChatModel>(context);
     final _usermodel = Provider.of<UserModel>(context);
     return Scaffold(
@@ -137,6 +140,59 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                             ),
                           ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                              child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: widget.chat.ImageCount,
+                                itemExtent: 170,
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder<List<String>>(
+                                    future: _GetImagesList(widget.chat.ChatID),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                Platform.isIOS
+                                                    ? CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            FullScreenImage(
+                                                                imgurl: snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .toString()),
+                                                      )
+                                                    : MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FullScreenImage(
+                                                          imgurl: snapshot
+                                                              .data![index]
+                                                              .toString(),
+                                                        ),
+                                                      ));
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.network(
+                                              snapshot.data![index].toString(),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return const Text("");
+                                      }
+                                    },
+                                  );
+                                }),
+                          )),
                         ),
                         Expanded(
                             child: Container(
@@ -305,49 +361,100 @@ class _DetailsPageState extends State<DetailsPage> {
                     border:
                         Border.fromBorderSide(BorderSide(color: Colors.grey))),
                 height: 80,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 24.0, right: 8),
-                        child: TextFormField(
-                          controller: _textEditingController,
-                          onChanged: (Value) {
-                            CommentString = Value;
-                          },
-                          decoration: InputDecoration(
-                              hintText: "Yorum yap",
-                              filled: true,
-                              fillColor: Colors.grey.shade300,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(20))),
-                        ),
+                child: _usermodel.user!.UserID == widget.chat.OwnerId
+                    ? Row(
+                        children: [
+                          IconButton(onPressed: () {}, icon: Icon(Icons.photo)),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 0.0, right: 8),
+                              child: TextFormField(
+                                controller: _textEditingController,
+                                onChanged: (Value) {
+                                  CommentString = Value;
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "Yorum yap",
+                                    filled: true,
+                                    fillColor: Colors.grey.shade300,
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius:
+                                            BorderRadius.circular(20))),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: IconButton(
+                              color: const Color.fromRGBO(88, 117, 251, 1),
+                              onPressed: () async {
+                                var doc = await FirebaseFirestore.instance
+                                    .collection("chats")
+                                    .doc(widget.chat.ChatID)
+                                    .set({
+                                  "CommentCount": FieldValue.increment(1)
+                                }, SetOptions(merge: true));
+                                _UploadComment();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                _textEditingController.clear();
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                Icons.send,
+                                size: 36,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 24.0, right: 8),
+                              child: TextFormField(
+                                controller: _textEditingController,
+                                onChanged: (Value) {
+                                  CommentString = Value;
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "Yorum yap",
+                                    filled: true,
+                                    fillColor: Colors.grey.shade300,
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius:
+                                            BorderRadius.circular(20))),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: IconButton(
+                              color: const Color.fromRGBO(88, 117, 251, 1),
+                              onPressed: () async {
+                                var doc = await FirebaseFirestore.instance
+                                    .collection("chats")
+                                    .doc(widget.chat.ChatID)
+                                    .set({
+                                  "CommentCount": FieldValue.increment(1)
+                                }, SetOptions(merge: true));
+                                _UploadComment();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                _textEditingController.clear();
+                                setState(() {});
+                              },
+                              icon: Icon(
+                                Icons.send,
+                                size: 36,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: IconButton(
-                        color: const Color.fromRGBO(88, 117, 251, 1),
-                        onPressed: () async {
-                          var doc = await FirebaseFirestore.instance
-                              .collection("chats")
-                              .doc(widget.chat.ChatID)
-                              .set({"CommentCount": FieldValue.increment(1)},
-                                  SetOptions(merge: true));
-                          _UploadComment();
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          _textEditingController.clear();
-                          setState(() {});
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          size: 36,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
               ),
               bottom: 1,
               left: 0,
@@ -394,5 +501,20 @@ class _DetailsPageState extends State<DetailsPage> {
       user = CuTalkUser.FromMap(m.data() as Map<String, dynamic>);
     }
     return user!;
+  }
+
+  Future<List<String>> _GetImagesList(String ChatID) async {
+    var doc =
+        await FirebaseFirestore.instance.collection("chats").doc(ChatID).get();
+    List<String> imagelist = [];
+    List<String> queryList = doc["ChatImageContent"].cast<String>();
+    if (queryList.length == 0) {
+      return imagelist;
+    } else {
+      for (String s in queryList) {
+        imagelist.add(s);
+      }
+    }
+    return imagelist;
   }
 }
