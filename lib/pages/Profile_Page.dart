@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage>
     final _usermodel = Provider.of<UserModel>(context);
     final _chatmodel = Provider.of<ChatModel>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
@@ -82,8 +86,9 @@ class _ProfilePageState extends State<ProfilePage>
                 child: CircleAvatar(
                   radius: 48,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: image == null? NetworkImage( _usermodel.user!.ProfileURL!
-                ): FileImage(image!)as ImageProvider,
+                  backgroundImage: image == null
+                      ? NetworkImage(_usermodel.user!.ProfileURL!)
+                      : FileImage(image!) as ImageProvider,
                   child: Stack(
                     children: [
                       Padding(
@@ -145,13 +150,14 @@ class _ProfilePageState extends State<ProfilePage>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
               child: TextFormField(
+                obscureText: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onChanged: (value) {
                   password = value;
                 },
                 validator: (value) {
-                  if (value!.length < 3) {
-                    return "İsim 3 karakterden küçük olamaz";
+                  if (value!.length < 6) {
+                    return "Şifre 6 karakterden küçük olamaz";
                   }
                 },
                 style: const TextStyle(color: Colors.white),
@@ -196,29 +202,44 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  _Submit() {}
+  _Submit() async {
+    final _userModel = Provider.of<UserModel>(context, listen: false);
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      if (name == null ||
+          name!.length < 3 ||
+          password == null ||
+          password!.length < 6) {
+        PlatformSensitiveAlertDialog(
+          title: "Hata",
+          content: "Bilgileriniz yanlış girildi",
+          mainButtonText: "Tamam",
+        ).show(context);
+      } else {
+        await FirebaseAuth.instance.currentUser!.updatePassword(password!);
+        _userModel.updateUserName(_userModel.user!.UserID, name!);
+        setState(() {});
+      }
+    }
+  }
 
   Future<void> _PictureFromCamera() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     final XFile? img = await _picker.pickImage(source: ImageSource.camera);
-    
-    
-    var url =await _usermodel.uploadFile(_usermodel.user!.UserID, "Profile_Picture", image);
-    setState(() {
-      
-    });
+
+    var url = await _usermodel.uploadFile(
+        _usermodel.user!.UserID, "Profile_Picture", image);
+    setState(() {});
   }
 
   Future<void> _PictureFromGallery() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     final XFile? img = await _picker.pickImage(source: ImageSource.gallery);
     image = File(img!.path);
-    
-    
-   var url =await _usermodel.uploadFile(_usermodel.user!.UserID, "Profile_Picture", image);
-    setState(() {
-      
-    });
-    
+
+    var url = await _usermodel.uploadFile(
+        _usermodel.user!.UserID, "Profile_Picture", image);
+    setState(() {});
   }
 }

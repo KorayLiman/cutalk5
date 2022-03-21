@@ -31,6 +31,12 @@ class UserRepository implements AuthBase {
     }
   }
 
+Future<bool> updateUserName(String userID, String yeniUserName) async {
+    
+      return await _fireStoreDBService.UpdateUserName(userID, yeniUserName);
+    
+  }
+
   @override
   Future<CuTalkUser?> currentUser() async {
     CuTalkUser? user = await _firebaseAuthService.currentUser();

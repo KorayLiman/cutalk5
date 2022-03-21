@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/pages/GeneralPage.dart';
+import 'package:ctlk2/pages/PasswordResetPage.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:email_validator/email_validator.dart';
@@ -195,7 +196,15 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(right: 18.0),
                     child: TextButton(
                         onPressed: () {
-                          _usermodel.SendPasswordResetEmail();
+                          Navigator.push(
+                              context,
+                              Platform.isIOS
+                                  ? CupertinoPageRoute(
+                                      builder: (context) => PasswordResetPage(),
+                                    )
+                                  : MaterialPageRoute(
+                                      builder: (context) => PasswordResetPage(),
+                                    ));
                         },
                         child: Text(
                           "Şifrenizi mi unuttunuz?",

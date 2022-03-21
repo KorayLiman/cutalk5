@@ -25,7 +25,14 @@ class UserModel with ChangeNotifier implements AuthBase {
   UserModel() {
     currentUser();
   }
+  Future<bool> updateUserName(String userId, String yeniUserName) async {
+    var sonuc = await _userRepository.updateUserName(userId, yeniUserName);
+    if (sonuc) {
+      _user!.UserName = yeniUserName;
+    }
 
+    return sonuc;
+  }
 
 Future<String> uploadFile(String userId, String fileType, File? image) async {
     var link = await _userRepository.uploadFile(userId, fileType, image);
@@ -95,5 +102,5 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
-  void SendPasswordResetEmail() {}
+  
 }
