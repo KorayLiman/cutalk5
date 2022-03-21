@@ -7,6 +7,7 @@ import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,14 +30,18 @@ class _ProfilePageState extends State<ProfilePage>
     final _usermodel = Provider.of<UserModel>(context);
     final _chatmodel = Provider.of<ChatModel>(context);
     return Scaffold(
+      floatingActionButton: GradientFloatingActionButton.extended(
+          onPressed: () {
+            _usermodel.signOut();
+          },
+          label: const Text("Çıkış"),
+          icon: const Icon(Icons.logout),
+          gradient: const LinearGradient(colors: [
+            Color.fromRGBO(240, 43, 17, 1),
+            Color.fromRGBO(244, 171, 25, 1)
+          ])),
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: const Text("Profil"),
-      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -207,19 +212,38 @@ class _ProfilePageState extends State<ProfilePage>
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      if (name == null ||
-          name!.length < 3 ||
-          password == null ||
-          password!.length < 6) {
+      if (name == null) {
+        name = _userModel.user!.UserName;
+      }
+      if (name == null || name!.length < 3) {
         PlatformSensitiveAlertDialog(
           title: "Hata",
           content: "Bilgileriniz yanlış girildi",
           mainButtonText: "Tamam",
         ).show(context);
       } else {
-        await FirebaseAuth.instance.currentUser!.updatePassword(password!);
-        _userModel.updateUserName(_userModel.user!.UserID, name!);
-        setState(() {});
+        try {
+          if (password != null && password!.length < 6) {
+            await FirebaseAuth.instance.currentUser!.updatePassword(password!);
+          }
+
+          if (name != _userModel.user!.UserName) {
+            _userModel.updateUserName(_userModel.user!.UserID, name!);
+          }
+          ;
+          setState(() {});
+          PlatformSensitiveAlertDialog(
+                  title: "Başarılı",
+                  content: "Bilgileriniz başarıyla güncellendi",
+                  mainButtonText: "Tamam")
+              .show(context);
+        } catch (error) {
+          PlatformSensitiveAlertDialog(
+                  title: "Hata",
+                  content: "Bir hata oluştu",
+                  mainButtonText: "Tamam")
+              .show(context);
+        }
       }
     }
   }

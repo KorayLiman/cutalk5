@@ -206,6 +206,6 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     await Future.delayed(const Duration(seconds: 1));
     setState(() {});
-    _usermodel.signOut();
+    
   }
 }

@@ -22,10 +22,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -34,11 +32,11 @@ class MyApp extends StatelessWidget {
           },
         ),
         ChangeNotifierProvider(create: (context) {
-          
           return ChatModel();
         })
       ],
       child: MaterialApp(
+          themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
           title: 'Cü Talk',
           home: LandingPage()),
