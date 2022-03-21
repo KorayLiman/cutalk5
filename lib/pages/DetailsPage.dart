@@ -355,7 +355,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                _UploadPhotos();
+                                _UploadPhotos(widget.chat);
                               },
                               icon: Icon(Icons.photo)),
                           Expanded(
@@ -500,7 +500,7 @@ class _DetailsPageState extends State<DetailsPage> {
     var doc =
         await FirebaseFirestore.instance.collection("chats").doc(ChatID).get();
     List<String> imagelist = [];
-    List<String> queryList = doc["ChatImageContent"].cast<String>();
+    List<String> queryList = List<String>.from(doc["ChatImageContent"].cast<String>());
     if (queryList.length == 0) {
       return imagelist;
     } else {
@@ -511,11 +511,12 @@ class _DetailsPageState extends State<DetailsPage> {
     return imagelist;
   }
 
-  void _UploadPhotos() async {
+  void _UploadPhotos(Chat chat) async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
       for (var img in images) {
+        chat.ImageCount= chat.ImageCount!+1;
         File i = File(img.path);
         Imgs.add(i);
         await _usermodel.uploadChatFile(
