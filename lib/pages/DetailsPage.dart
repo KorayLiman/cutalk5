@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -182,9 +183,14 @@ class _DetailsPageState extends State<DetailsPage> {
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                              snapshot.data![index].toString(),
-                                            ),
+                                            child: snapshot.data!.length <
+                                                    widget.chat.ImageCount!
+                                                        .toInt()
+                                                ? Image.file(Imgs[index])
+                                                : Image.network(
+                                                    snapshot.data![index]
+                                                        .toString(),
+                                                  ),
                                           ),
                                         );
                                       } else {
@@ -354,8 +360,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     ? Row(
                         children: [
                           IconButton(
-                              onPressed: () {
-                                _UploadPhotos(widget.chat);
+                              onPressed: () async {
+                                await _UploadPhotos(widget.chat);
+                                setState(() {});
                               },
                               icon: Icon(Icons.photo)),
                           Expanded(
@@ -500,7 +507,8 @@ class _DetailsPageState extends State<DetailsPage> {
     var doc =
         await FirebaseFirestore.instance.collection("chats").doc(ChatID).get();
     List<String> imagelist = [];
-    List<String> queryList = List<String>.from(doc["ChatImageContent"].cast<String>());
+    List<String> queryList =
+        List<String>.from(doc["ChatImageContent"].cast<String>());
     if (queryList.length == 0) {
       return imagelist;
     } else {
@@ -511,12 +519,17 @@ class _DetailsPageState extends State<DetailsPage> {
     return imagelist;
   }
 
-  void _UploadPhotos(Chat chat) async {
+  Future<void> _UploadPhotos(Chat chat) async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
+      for (var i in images) {
+        chat.ImageCount = chat.ImageCount! + 1;
+        File f = File(i.path);
+        Imgs.add(f);
+        setState(() {});
+      }
       for (var img in images) {
-        chat.ImageCount= chat.ImageCount!+1;
         File i = File(img.path);
         Imgs.add(i);
         await _usermodel.uploadChatFile(
