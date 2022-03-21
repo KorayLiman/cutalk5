@@ -8,12 +8,12 @@ import 'package:ctlk2/pages/FullScreenImage.dart';
 
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
-import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -28,7 +28,8 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   final DateFormat formatter = DateFormat('dd/MM/yyyy');
-
+  final ImagePicker _picker = ImagePicker();
+  List<File> Imgs = [];
   final TextEditingController _textEditingController = TextEditingController();
   String? CommentString;
   @override
@@ -290,58 +291,46 @@ class _DetailsPageState extends State<DetailsPage> {
                                           var currentComment =
                                               snapshot.data![index];
                                           return ListTile(
-                                            subtitle: FutureBuilder<CuTalkUser>(
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    currentComment.Content,
-                                                    style: GoogleFonts.ubuntu(),
-                                                  );
-                                                } else {
-                                                  return Text("");
-                                                }
-                                              },
-                                              future: _GetCommentOwner(
-                                                  currentComment.OwnerID),
-                                            ),
-                                            title: FutureBuilder<CuTalkUser>(
-                                              future: _GetCommentOwner(
-                                                  currentComment.OwnerID),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    snapshot.data!.UserName
-                                                        .toString(),
-                                                    style: GoogleFonts.ubuntu(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  );
-                                                } else {
-                                                  return Text("");
-                                                }
-                                              },
-                                            ),
-                                            leading: FutureBuilder<CuTalkUser>(
-                                              builder: (context, snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                  );
-                                                } else {
-                                                  return CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      backgroundImage:
-                                                          NetworkImage(snapshot
-                                                              .data!
-                                                              .ProfileURL!));
-                                                }
-                                              },
-                                              future: _GetCommentOwner(
-                                                  currentComment.OwnerID),
-                                            ),
-                                          );
+                                              subtitle:
+                                                  FutureBuilder<CuTalkUser>(
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      currentComment.Content,
+                                                      style:
+                                                          GoogleFonts.ubuntu(),
+                                                    );
+                                                  } else {
+                                                    return Text("");
+                                                  }
+                                                },
+                                                future: _GetCommentOwner(
+                                                    currentComment.OwnerID),
+                                              ),
+                                              title: FutureBuilder<CuTalkUser>(
+                                                future: _GetCommentOwner(
+                                                    currentComment.OwnerID),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      snapshot.data!.UserName
+                                                          .toString(),
+                                                      style: GoogleFonts.ubuntu(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    );
+                                                  } else {
+                                                    return Text("");
+                                                  }
+                                                },
+                                              ),
+                                              leading: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                backgroundImage: NetworkImage(
+                                                    widget
+                                                        .chat.OwnerProfileUrl),
+                                              ));
                                         },
                                       );
                                     }
@@ -364,7 +353,11 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: _usermodel.user!.UserID == widget.chat.OwnerId
                     ? Row(
                         children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.photo)),
+                          IconButton(
+                              onPressed: () {
+                                _UploadPhotos();
+                              },
+                              icon: Icon(Icons.photo)),
                           Expanded(
                             child: Padding(
                               padding:
@@ -516,5 +509,18 @@ class _DetailsPageState extends State<DetailsPage> {
       }
     }
     return imagelist;
+  }
+
+  void _UploadPhotos() async {
+    final _usermodel = Provider.of<UserModel>(context, listen: false);
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images != null) {
+      for (var img in images) {
+        File i = File(img.path);
+        Imgs.add(i);
+        await _usermodel.uploadChatFile(
+            _usermodel.user!.UserID, "chatimage", i, widget.chat.ChatID);
+      }
+    }
   }
 }

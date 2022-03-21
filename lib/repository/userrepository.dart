@@ -31,10 +31,8 @@ class UserRepository implements AuthBase {
     }
   }
 
-Future<bool> updateUserName(String userID, String yeniUserName) async {
-    
-      return await _fireStoreDBService.UpdateUserName(userID, yeniUserName);
-    
+  Future<bool> updateUserName(String userID, String yeniUserName) async {
+    return await _fireStoreDBService.UpdateUserName(userID, yeniUserName);
   }
 
   @override
@@ -77,5 +75,12 @@ Future<bool> updateUserName(String userID, String yeniUserName) async {
         await _fireBaseStorageService.uploadFile(userId, fileType, image!);
     await _fireStoreDBService.UpdateProfilePhoto(userId, ProfilePhotoUrl);
     return ProfilePhotoUrl;
+  }
+
+  Future<String> uploadChatFile(
+      String userID, String s, File i, String ChatID) async {
+    String url = await _fireBaseStorageService.uploadChatFile(userID, s, i);
+    await _fireStoreDBService.updateChatPhotos(userID, url, ChatID);
+    return url;
   }
 }

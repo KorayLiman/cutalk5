@@ -43,6 +43,12 @@ class FireStoreDBService implements DBBase {
     return true;
   }
 
+  updateChatPhotos(String userID, String url, String ChatID) async {
+    await _firestore.collection("chats").doc(ChatID).update({
+      "ChatImageContent": FieldValue.arrayUnion([url])
+    });
+  }
+
   @override
   Future<bool> UpdateUserName(String UserID, String NewUserName) async {
     QuerySnapshot users = await _firestore
@@ -104,7 +110,8 @@ class FireStoreDBService implements DBBase {
     List<Comment> list = [];
     QuerySnapshot docs = await _firestore
         .collection("comments")
-        .where("BelongingChatID", isEqualTo: chatID).orderBy("SentAt",descending: true)
+        .where("BelongingChatID", isEqualTo: chatID)
+        .orderBy("SentAt", descending: true)
         .get();
     for (var doc in docs.docs) {
       Comment comment = Comment.fromMap(doc.data() as Map<String, dynamic>);

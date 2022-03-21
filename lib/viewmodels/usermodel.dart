@@ -102,5 +102,10 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
+  Future<String> uploadChatFile(String userID, String s, File i,String chatID) async{
+     var link = await _userRepository.uploadChatFile(userID, s, i,chatID);
+    return link;
+  }
+
   
 }
