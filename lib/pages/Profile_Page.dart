@@ -250,11 +250,13 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _PictureFromCamera() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
-    final XFile? img = await _picker.pickImage(source: ImageSource.camera);
+    
+      final XFile? img = await _picker.pickImage(source: ImageSource.camera);
 
-    var url = await _usermodel.uploadFile(
-        _usermodel.user!.UserID, "Profile_Picture", image);
-    setState(() {});
+      var url = await _usermodel.uploadFile(
+          _usermodel.user!.UserID, "Profile_Picture", image);
+      setState(() {});
+    
   }
 
   Future<void> _PictureFromGallery() async {

@@ -297,6 +297,12 @@ class _DetailsPageState extends State<DetailsPage> {
                                           var currentComment =
                                               snapshot.data![index];
                                           return ListTile(
+                                            onLongPress: (){
+                                              if(widget.chat.OwnerId == _usermodel.user!.UserID)
+                                              {
+                                                
+                                              }
+                                            },
                                               subtitle:
                                                   FutureBuilder<CuTalkUser>(
                                                 builder: (context, snapshot) {
