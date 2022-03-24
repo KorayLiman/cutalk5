@@ -8,6 +8,7 @@ import 'package:ctlk2/pages/FullScreenImage.dart';
 
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 
 import 'package:flutter/cupertino.dart';
 
@@ -297,12 +298,22 @@ class _DetailsPageState extends State<DetailsPage> {
                                           var currentComment =
                                               snapshot.data![index];
                                           return ListTile(
-                                            onLongPress: (){
-                                              if(widget.chat.OwnerId == _usermodel.user!.UserID)
-                                              {
-                                                
-                                              }
-                                            },
+                                              onLongPress: () {
+                                                if (currentComment.OwnerID ==
+                                                    _usermodel.user!.UserID) {
+                                                  PlatformSensitiveDeleteButton(
+                                                    title: "Sil",
+                                                    content:
+                                                        "Yorumu silmek istediğinizden emin misiniz?",
+                                                    mainButtonText: "Evet",
+                                                    secondaryButtonText:
+                                                        "Hayır",
+                                                    callback: () {
+                                                      
+                                                    },
+                                                  ).show(context);
+                                                }
+                                              },
                                               subtitle:
                                                   FutureBuilder<CuTalkUser>(
                                                 builder: (context, snapshot) {
@@ -425,6 +436,18 @@ class _DetailsPageState extends State<DetailsPage> {
                                 controller: _textEditingController,
                                 onChanged: (Value) {
                                   CommentString = Value;
+                                },
+                                onFieldSubmitted: (value) async {
+                                  var doc = await FirebaseFirestore.instance
+                                      .collection("chats")
+                                      .doc(widget.chat.ChatID)
+                                      .set({
+                                    "CommentCount": FieldValue.increment(1)
+                                  }, SetOptions(merge: true));
+                                  _UploadComment();
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  _textEditingController.clear();
+                                  setState(() {});
                                 },
                                 decoration: InputDecoration(
                                     hintText: "Yorum yap",

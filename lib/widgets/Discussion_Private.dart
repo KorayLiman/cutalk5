@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/pages/DetailsPage.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
@@ -41,45 +42,50 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
       floatingActionButton: _usermodel.user!.IsFromUniversity
           ? GradientFloatingActionButton.extended(
               onPressed: () {
-                if(FirebaseAuth.instance.currentUser!.emailVerified){showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: ListTile(
-                        title: TextFormField(
-                          onFieldSubmitted: (value) {
-                            if (value.length > 0) {
-                              Chat ch = Chat(
-                                  Content: value,
-                                  ChatID: _usermodel.user!.UserName.toString() +
-                                      Uuid().v4().toString(),
-                                  OwnerId: _usermodel.user!.UserID,
-                                  OwnerProfileUrl: _usermodel.user!.ProfileURL!,
-                                  OwnerName: _usermodel.user!.UserName!,
-                                  OwnerEmail: _usermodel.user!.Email,
-                                  IsPrivate: true);
-                              _chatmodel.SaveChat(ch);
-                              Navigator.pop(context);
-                              ;
-                            }
-                          },
-                          decoration: InputDecoration(
-                              hintText: "Sohbet içeriğinizi yazın"),
-                          autofocus: true,
+                if (FirebaseAuth.instance.currentUser!.emailVerified) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: ListTile(
+                          title: TextFormField(
+                            onFieldSubmitted: (value) {
+                              if (value.length > 0) {
+                                Chat ch = Chat(
+                                    Content: value,
+                                    ChatID:
+                                        _usermodel.user!.UserName.toString() +
+                                            Uuid().v4().toString(),
+                                    OwnerId: _usermodel.user!.UserID,
+                                    OwnerProfileUrl:
+                                        _usermodel.user!.ProfileURL!,
+                                    OwnerName: _usermodel.user!.UserName!,
+                                    OwnerEmail: _usermodel.user!.Email,
+                                    IsPrivate: true);
+                                _chatmodel.SaveChat(ch);
+                                Navigator.pop(context);
+                                ;
+                              }
+                            },
+                            decoration: InputDecoration(
+                                hintText: "Sohbet içeriğinizi yazın"),
+                            autofocus: true,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-                setState(() {});}
-                else{ PlatformSensitiveAlertDialog(
-                title: "Email onayı",
-                content: "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
-                mainButtonText: "Tamam",
-              ).show(context);}
-                
+                      );
+                    },
+                  );
+                  setState(() {});
+                } else {
+                  PlatformSensitiveAlertDialog(
+                    title: "Email onayı",
+                    content:
+                        "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
+                    mainButtonText: "Tamam",
+                  ).show(context);
+                }
               },
               label: const Text("Sohbet oluştur"),
               icon: const Icon(Icons.message),
@@ -140,8 +146,11 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                                   "2020123170@cumhuriyet.edu.tr") {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
-                              chat: CurrentChat,
                               callback: () {
+                                FirebaseFirestore.instance
+                                    .collection("chats")
+                                    .doc(CurrentChat.ChatID)
+                                    .delete();
                                 setState(() {});
                               },
                               content: "Sohbeti silmek istiyor musunuz?",
@@ -209,6 +218,5 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     await Future.delayed(const Duration(seconds: 1));
     setState(() {});
-    
   }
 }

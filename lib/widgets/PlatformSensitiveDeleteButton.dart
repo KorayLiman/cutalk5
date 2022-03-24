@@ -12,12 +12,12 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
   final String content;
   final String mainButtonText;
   final String secondaryButtonText;
-  final Chat chat;
-  VoidCallback callback;
+ 
+  final VoidCallback callback;
 
   PlatformSensitiveDeleteButton(
       {required this.title,
-      required this.chat,
+      
       required this.callback,
       required this.content,
       required this.mainButtonText,
@@ -59,10 +59,7 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
       AllButtons.add(CupertinoDialogAction(
         child: Text(mainButtonText),
         onPressed: () {
-          FirebaseFirestore.instance
-              .collection("chats")
-              .doc(chat.ChatID)
-              .delete();
+          
           callback();
           Navigator.pop(context);
         },
@@ -75,10 +72,7 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
           child: Text(secondaryButtonText)));
       AllButtons.add(TextButton(
           onPressed: () {
-            FirebaseFirestore.instance
-                .collection("chats")
-                .doc(chat.ChatID)
-                .delete();
+            
                 callback();
             Navigator.pop(context);
           },

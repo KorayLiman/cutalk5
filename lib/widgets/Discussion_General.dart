@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/pages/DetailsPage.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
@@ -137,8 +138,12 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                   "2020123170@cumhuriyet.edu.tr") {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
-                              chat: CurrentChat,
+                             
                               callback: () {
+                                FirebaseFirestore.instance
+              .collection("chats")
+              .doc(CurrentChat.ChatID)
+              .delete();
                                 setState(() {});
                               },
                               content: "Sohbeti silmek istiyor musunuz?",
