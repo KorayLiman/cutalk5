@@ -1,6 +1,6 @@
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 abstract class DBBase {
   Future<bool> SaveUser(CuTalkUser user,);

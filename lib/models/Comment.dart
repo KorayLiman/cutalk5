@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ctlk2/models/user.dart';
+
 
 class Comment {
   final String OwnerID;

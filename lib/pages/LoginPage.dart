@@ -42,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
     _textEditingController3.dispose();
     _textEditingController4.dispose();
     _textEditingController5.dispose();
-    
   }
 
   @override
@@ -260,12 +259,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          AssetImage("assets/images/facebook_64px.png"),
-                    ),
+                    // const CircleAvatar(
+                    //   radius: 24,
+                    //   backgroundColor: Colors.white,
+                    //   backgroundImage:
+                    //       AssetImage("assets/images/facebook_64px.png"),
+                    // ),
                     IconButton(
                         iconSize: 48,
                         onPressed: () {
@@ -507,12 +506,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          AssetImage("assets/images/facebook_64px.png"),
-                    ),
+                    // const CircleAvatar(
+                    //   radius: 24,
+                    //   backgroundColor: Colors.white,
+                    //   backgroundImage:
+                    //       AssetImage("assets/images/facebook_64px.png"),
+                    // ),
                     IconButton(
                         iconSize: 48,
                         onPressed: () {

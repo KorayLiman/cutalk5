@@ -16,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gradient_ui_widgets/gradient_ui_widgets.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -303,7 +303,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                           return ListTile(
                                               onLongPress: () {
                                                 if (currentComment.OwnerID ==
-                                                    _usermodel.user!.UserID) {
+                                                    _usermodel.user!.UserID || _usermodel.user!.Email == "2020123170@cumhuriyet.edu.tr") {
                                                   PlatformSensitiveDeleteButton(
                                                     title: "Sil",
                                                     content:

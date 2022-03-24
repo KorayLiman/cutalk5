@@ -3,7 +3,7 @@ import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/dbbase.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class FireStoreDBService implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -1,13 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:clippy_flutter/clippy_flutter.dart';
-import 'package:ctlk2/constants/constants.dart';
+
 import 'package:ctlk2/pages/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gradient_ui_widgets/buttons/gradient_elevated_button.dart';
+
 import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
-import 'package:gradient_ui_widgets/buttons/gradient_text_button.dart';
+
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);

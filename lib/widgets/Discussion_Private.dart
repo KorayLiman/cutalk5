@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
 import 'package:gradient_ui_widgets/progress_indicator/gradient_progress_indicator.dart';
-import 'package:intl/number_symbols_data.dart';
+
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
