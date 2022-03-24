@@ -47,6 +47,23 @@
 		<string>Profil fotografi icin galeri izni</string>
 	<key>NSCameraUsageDescription</key>
 		<string>Profil fotografi icin kamera izni</string>
-
+        <!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+        <!-- Google Sign-in Section -->
+        <!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+        <!-- Google Sign-in Section -->
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <!-- TODO Replace this value: -->
+                    <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+                    <string>com.googleusercontent.apps.172690454475-aq2raooan3gfe0n5s4ipsg44jvmsbvnu</string>
+                </array>
+            </dict>
+        </array>
+        <!-- End of the Google Sign-in Section -->        <!-- End of the Google Sign-in Section -->
 </dict>
 </plist>
