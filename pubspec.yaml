@@ -52,6 +52,7 @@ dependencies:
   email_validator: ^2.0.1
   connectivity_plus: ^2.2.1
   uuid: ^3.0.6
+  profanity_filter: ^2.0.0
   image_picker: ^0.8.4+11
   intl: ^0.17.0
   auto_size_text: ^3.0.0

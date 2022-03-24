@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ctlk2/SwearBlocker.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
@@ -8,6 +9,7 @@ import 'package:ctlk2/pages/FullScreenImage.dart';
 
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -20,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:uuid/uuid.dart';
 
 class DetailsPage extends StatefulWidget {
   DetailsPage({Key? key, required this.chat}) : super(key: key);
@@ -308,11 +311,22 @@ class _DetailsPageState extends State<DetailsPage> {
                                                     mainButtonText: "Evet",
                                                     secondaryButtonText:
                                                         "Hayır",
-                                                    callback: () {
-                                                      
+                                                    callback: () async {
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              "comments")
+                                                          .doc(currentComment
+                                                              .CommentID)
+                                                          .delete()
+                                                          .then((value) {
+                                                        setState(() {});
+                                                      });
                                                     },
                                                   ).show(context);
                                                 }
+                                                widget.chat.CommentCount =
+                                                    widget.chat.CommentCount! -
+                                                        1;
                                               },
                                               subtitle:
                                                   FutureBuilder<CuTalkUser>(
@@ -384,8 +398,11 @@ class _DetailsPageState extends State<DetailsPage> {
                               icon: Icon(Icons.photo)),
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 0.0, right: 8),
+                              padding: EdgeInsets.only(
+                                  left: 0.0,
+                                  right: 8,
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
                               child: TextFormField(
                                 controller: _textEditingController,
                                 onChanged: (Value) {
@@ -406,17 +423,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: IconButton(
                               color: const Color.fromRGBO(88, 117, 251, 1),
-                              onPressed: () async {
-                                var doc = await FirebaseFirestore.instance
-                                    .collection("chats")
-                                    .doc(widget.chat.ChatID)
-                                    .set({
-                                  "CommentCount": FieldValue.increment(1)
-                                }, SetOptions(merge: true));
+                              onPressed: () {
                                 _UploadComment();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                _textEditingController.clear();
-                                setState(() {});
                               },
                               icon: Icon(
                                 Icons.send,
@@ -506,18 +514,46 @@ class _DetailsPageState extends State<DetailsPage> {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
 
     if (CommentString != null && CommentString!.length > 0) {
-      try {
-        Comment com = Comment(
-          BelongingChatID: widget.chat.ChatID,
-          Content: CommentString!,
-          OwnerID: _usermodel.user!.UserID,
-        );
-        await FirebaseFirestore.instance
-            .collection("comments")
-            .doc()
-            .set(com.toMap());
-      } catch (error) {
-        print(error.toString());
+      bool ContainsSwear = false;
+      SwearBlockerClass.SwearBlocker.forEach((element) {
+        if (element.length > 2) {
+          if (CommentString!.toLowerCase().contains(element)) {
+            ContainsSwear = true;
+          }
+        }
+      });
+      if (ContainsSwear == false) {
+        try {
+          var doc = await FirebaseFirestore.instance
+              .collection("chats")
+              .doc(widget.chat.ChatID)
+              .set({"CommentCount": FieldValue.increment(1)},
+                  SetOptions(merge: true));
+          Comment com = Comment(
+            BelongingChatID: widget.chat.ChatID,
+            Content: CommentString!,
+            CommentID: Uuid().v4(),
+            OwnerID: _usermodel.user!.UserID,
+          );
+          await FirebaseFirestore.instance
+              .collection("comments")
+              .doc(com.CommentID)
+              .set(com.toMap());
+          FocusManager.instance.primaryFocus?.unfocus();
+          _textEditingController.clear();
+          setState(() {});
+        } catch (error) {
+          print(error.toString());
+        }
+      } else {
+        FocusManager.instance.primaryFocus?.unfocus();
+        _textEditingController.clear();
+        setState(() {});
+        PlatformSensitiveAlertDialog(
+          title: "Küfürlü içerik",
+          content: "Küfür veya hakaret yasaktır",
+          mainButtonText: "Anladım",
+        ).show(context);
       }
     }
   }

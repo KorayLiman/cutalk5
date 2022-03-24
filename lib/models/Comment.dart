@@ -5,10 +5,12 @@ class Comment {
   final String OwnerID;
   final String BelongingChatID;
   final String Content;
+  final String CommentID;
   final Timestamp? SentAt;
 
   Comment(
       {required this.OwnerID,
+      required this.CommentID,
       required this.BelongingChatID,
       required this.Content,
       this.SentAt});
@@ -18,6 +20,7 @@ class Comment {
       "OwnerID": OwnerID,
       "SentAt": SentAt ?? FieldValue.serverTimestamp(),
       "BelongingChatID": BelongingChatID,
+      "CommentID":CommentID,
       "Content": Content,
     };
   }
@@ -25,6 +28,7 @@ class Comment {
   Comment.fromMap(Map<String, dynamic> map)
       : OwnerID = map["OwnerID"],
         SentAt = map["SentAt"],
+        CommentID = map["CommentID"],
         BelongingChatID = map["BelongingChatID"],
         Content = map["Content"];
 }

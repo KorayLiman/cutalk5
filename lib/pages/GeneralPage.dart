@@ -84,6 +84,24 @@ class _GeneralPageState extends State<GeneralPage>
                     },
                     title: const Text("Koyu mod"),
                   ),
+            const AboutListTile(
+              child: Text("Hakkında ve uyarılar"),
+              applicationName: "Cü Talk",
+              applicationVersion: "v1.0",
+              aboutBoxChildren: [
+                Text("1- Küfür ve hakaret kesinlikle yasaktır."),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                    "2- Ahlaki kurallara aykırı paylaşımlar yasaktır ve bu kişilerin hesapları engellenir."),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                    "3- Uygulamanın amacı öğrencilerin öğrencilik hayatını kolaylaştırmak ve aramızdaki iletişimi kolaylaştırmaktır")
+              ],
+            ),
           ],
         )),
         backgroundColor: Colors.grey.shade100,

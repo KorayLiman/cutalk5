@@ -3,6 +3,7 @@ import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/authbase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -50,14 +51,14 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    
+
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    
+
     UserCredential crd =
         await FirebaseAuth.instance.signInWithCredential(credential);
     return await _userFromFirebase(crd.user);
@@ -68,14 +69,25 @@ class FirebaseAuthService implements AuthBase {
       return null;
     } else {
       bool IsFromUniversity = false;
-      if (user.email!.contains("@cumhuriyet.edu.tr")) {
+      if (user.email!.contains("@cumhuriyet.edu.tr")) 
         IsFromUniversity = true;
+
+String? url;
+      DocumentSnapshot? fbuser = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .get();
+      if (fbuser.exists)
+        url = fbuser["ProfileURL"].toString();
+      else
+        url = null;
+        return CuTalkUser(
+            UserID: user.uid,
+            Email: user.email!,
+            ProfileURL: url,
+            UserName: user.displayName ?? null,
+            IsFromUniversity: IsFromUniversity ? true : false);
       }
-      return CuTalkUser(
-          UserID: user.uid,
-          Email: user.email!,
-          UserName: user.displayName ?? null,
-          IsFromUniversity: IsFromUniversity ? true : false);
     }
-  }
+  
 }
