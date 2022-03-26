@@ -95,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ? NetworkImage(_usermodel.user!.ProfileURL!)
                       : FileImage(image!) as ImageProvider,
                   child: Stack(
-                    children: [
+                    children: const [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 4.0, right: 4.0),
                         child: Align(
@@ -230,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage>
           if (name != _userModel.user!.UserName) {
             _userModel.updateUserName(_userModel.user!.UserID, name!);
           }
-          ;
+          
           setState(() {});
           PlatformSensitiveAlertDialog(
                   title: "Başarılı",

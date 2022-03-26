@@ -4,7 +4,6 @@ import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/dbbase.dart';
 
-
 class FireStoreDBService implements DBBase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -51,18 +50,20 @@ class FireStoreDBService implements DBBase {
 
   @override
   Future<bool> UpdateUserName(String UserID, String NewUserName) async {
-    QuerySnapshot users = await _firestore
-        .collection("users")
-        .where("UserName", isEqualTo: NewUserName)
-        .get();
-    if (users.docs.length > 0) {
+    // QuerySnapshot users = await _firestore
+    //     .collection("users")
+    //     .where("UserName", isEqualTo: NewUserName)
+    //     .get();
+    try {
       await _firestore
           .collection("users")
           .doc(UserID)
           .update({"UserName": NewUserName});
       return true;
+    } catch (error) {
+      print(error);
+      return false;
     }
-    return false;
   }
 
   @override
