@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ctlk2">
+    package="com.korayliman.ctlk">
    <application
         android:label="ctlk2"
         android:name="${applicationName}"

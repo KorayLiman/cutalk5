@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:172690454475:android:ea22a0ae0435b5ea1fa84e",
         "android_client_info": {
-          "package_name": "com.example.ctlk2"
+          "package_name": "com.korayliman.ctlk"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "172690454475-2ahbg0i9326l408uiid5t603ml99042c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ctlk2",
+            "package_name": "com.korayliman.ctlk",
             "certificate_hash": "e5369229369eb57b0335a5fc69ca9e92c7f8c36e"
           }
         },
@@ -25,7 +25,7 @@
           "client_id": "172690454475-bjfmi5pou9q2f034cdh7glm9ocdc3tgj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ctlk2",
+            "package_name": "com.korayliman.ctlk",
             "certificate_hash": "542f0f7ba0ad091c56e687e5c22f6824835d2405"
           }
         },
