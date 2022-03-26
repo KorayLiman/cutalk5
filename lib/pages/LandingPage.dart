@@ -4,6 +4,7 @@ import 'package:ctlk2/pages/LoginPage.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
 
@@ -34,17 +35,29 @@ class LandingPage extends StatelessWidget {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Cü",
+                          style: GoogleFonts.ubuntu(
+                              color: Colors.white, fontSize: 24)),
+                      Image.asset("assets/images/KakaoTalk_48px.png")
+                    ],
+                  ),
+                ),
+                const Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80.0),
                   child: LinearProgressIndicator(
                     color: Color.fromRGBO(131, 0, 254, 1),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80.0),
                   child: LinearProgressIndicator(
                     color: Color.fromRGBO(219, 0, 254, 1),

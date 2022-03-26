@@ -91,7 +91,7 @@ class _GeneralPageState extends State<GeneralPage>
                   ),
             const AboutListTile(
               child: Text("Hakkında ve uyarılar"),
-              applicationName: "Cü Talk by Koray Liman",
+              applicationName: "Cü Talk",
               applicationVersion: "v1.0",
               aboutBoxChildren: [
                 Text("1- Küfür ve hakaret kesinlikle yasaktır."),
@@ -114,17 +114,17 @@ class _GeneralPageState extends State<GeneralPage>
                 showDialog(
                     context: context,
                     builder: (context) {
-                      return Scaffold(
-                        backgroundColor: Colors.transparent,
-                        body: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30.0, vertical: 80),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 80),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(16),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: double.infinity,
                             decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.8),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(16)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -210,7 +210,21 @@ class _GeneralPageState extends State<GeneralPage>
                       );
                     });
               },
-            )
+            ),
+            Expanded(
+                child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "Made by Koray Liman",
+                    style: GoogleFonts.ubuntu(),
+                  )
+                ],
+              ),
+            ))
           ],
         )),
         backgroundColor: Colors.grey.shade100,

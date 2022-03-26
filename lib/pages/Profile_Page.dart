@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ctlk2/pages/LoadingPage.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_ui_widgets/buttons/gradient_floating_action_button.dart';
@@ -230,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage>
           if (name != _userModel.user!.UserName) {
             _userModel.updateUserName(_userModel.user!.UserID, name!);
           }
-          
+
           setState(() {});
           PlatformSensitiveAlertDialog(
                   title: "Başarılı",
@@ -251,21 +253,42 @@ class _ProfilePageState extends State<ProfilePage>
   Future<void> _PictureFromCamera() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
 
-    final XFile? img = await _picker.pickImage(source: ImageSource.camera);
-
+    final XFile? img = await _picker
+        .pickImage(source: ImageSource.camera)
+        .whenComplete(() => PlatformSensitiveAlertDialog(
+                title: "Lütfen bekleyin",
+                content:
+                    "Profil fotoğrafının güncellenmesi 5- 10 saniyeyi bulabilir",
+                mainButtonText: "Tamam")
+            .show(context));
+    File image1 = File(img!.path);
     var url = await _usermodel.uploadFile(
-        _usermodel.user!.UserID, "Profile_Picture", image);
-    setState(() {});
+        _usermodel.user!.UserID, "Profile_Picture", image1);
+    setState(() {
+      image = image1;
+      _usermodel.user!.ProfileURL = url;
+    });
   }
 
   Future<void> _PictureFromGallery() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
-    final XFile? img = await _picker.pickImage(source: ImageSource.gallery);
-    image = File(img!.path);
 
+    final XFile? img = await _picker
+        .pickImage(source: ImageSource.gallery)
+        .whenComplete(() => PlatformSensitiveAlertDialog(
+                title: "Lütfen bekleyin",
+                content:
+                    "Profil fotoğrafının güncellenmesi 5- 10 saniyeyi bulabilir",
+                mainButtonText: "Tamam")
+            .show(context));
+    File image1 = File(img!.path);
     var url = await _usermodel.uploadFile(
-        _usermodel.user!.UserID, "Profile_Picture", image);
-    _usermodel.user!.ProfileURL = url;
-    setState(() {});
+        _usermodel.user!.UserID, "Profile_Picture", image1);
+
+    setState(() {
+      image = image1;
+      _usermodel.user!.ProfileURL = url;
+    });
+    
   }
 }
