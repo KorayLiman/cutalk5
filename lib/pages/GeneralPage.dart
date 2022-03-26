@@ -3,10 +3,12 @@ import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Discussion_General.dart';
 import 'package:ctlk2/widgets/Discussion_Private.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
@@ -21,6 +23,9 @@ class GeneralPage extends StatefulWidget {
 class _GeneralPageState extends State<GeneralPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String? Subject, Content;
+  int CurrentIndex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -86,7 +91,7 @@ class _GeneralPageState extends State<GeneralPage>
                   ),
             const AboutListTile(
               child: Text("Hakkında ve uyarılar"),
-              applicationName: "Cü Talk",
+              applicationName: "Cü Talk by Koray Liman",
               applicationVersion: "v1.0",
               aboutBoxChildren: [
                 Text("1- Küfür ve hakaret kesinlikle yasaktır."),
@@ -102,6 +107,110 @@ class _GeneralPageState extends State<GeneralPage>
                     "3- Uygulamanın amacı öğrencilerin öğrencilik hayatını kolaylaştırmak ve aramızdaki iletişimi kolaylaştırmaktır")
               ],
             ),
+            ListTile(
+              trailing: Icon(Icons.contact_page),
+              title: const Text("Hata ve görüş bildir"),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 80),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Hata ve görüş bildirim formu",
+                                  style: GoogleFonts.ubuntu(
+                                      color: Colors.black, fontSize: 21),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: TextFormField(
+                                    autofocus: true,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    validator: (value) {
+                                      if (value!.length < 1) {
+                                        return "Konu 1 harften büyük olmalı";
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      Subject = value;
+                                    },
+                                    decoration: InputDecoration(
+                                        hintText: "Konu",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: TextFormField(
+                                    autofocus: true,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    validator: (value) {
+                                      if (value!.length < 1) {
+                                        return "İçerik 1 harften büyük olmalı";
+                                      }
+                                    },
+                                    onChanged: (value) {
+                                      Content = value;
+                                    },
+                                    maxLines: 3,
+                                    decoration: InputDecoration(
+                                        hintText: "İçerik",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none)),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      if (Subject != null && Content != null) {
+                                        final Email email = Email(
+                                            subject: Subject!,
+                                            body: Content!,
+                                            recipients: [
+                                              "koraylimancre@gmail.com"
+                                            ]);
+                                        try {
+                                          await FlutterEmailSender.send(email);
+                                        } catch (error) {
+                                          print(error);
+                                        }
+
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        PlatformSensitiveAlertDialog(
+                                          title: "Başarılı",
+                                          content: "Mail gönderildi",
+                                          mainButtonText: "Tamam",
+                                        ).show(context);
+                                      }
+                                    },
+                                    child: const Text("Gönder"))
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+              },
+            )
           ],
         )),
         backgroundColor: Colors.grey.shade100,

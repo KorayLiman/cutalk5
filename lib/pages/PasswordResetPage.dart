@@ -8,9 +8,8 @@ class PasswordResetPage extends StatelessWidget {
   TextEditingController _textEditingController = TextEditingController();
   String? email;
   final snackBar = const SnackBar(
-  content:  Text('Mailinize link gönderildi'),
- 
-);
+    content: Text('Mailinize link gönderildi'),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,8 +70,10 @@ class PasswordResetPage extends StatelessWidget {
                     onPressed: () {
                       if (email != null) {
                         FirebaseAuth.instance
-                            .sendPasswordResetEmail(email: email!.trim()).then((value) => ScaffoldMessenger.of(context).showSnackBar(snackBar));
-                            FocusManager.instance.primaryFocus?.unfocus();
+                            .sendPasswordResetEmail(email: email!.trim())
+                            .then((value) => ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar));
+                        FocusManager.instance.primaryFocus?.unfocus();
                         _textEditingController.clear();
                       }
                     },

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/authbase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -50,18 +50,23 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<CuTalkUser?> signinwithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    UserCredential crd =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    return await _userFromFirebase(crd.user);
+      UserCredential crd =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return await _userFromFirebase(crd.user);
+    } on PlatformException catch (error) {
+      print(error);
+      return null;
+    }
   }
 
   Future<CuTalkUser?> _userFromFirebase(User? user) async {
@@ -69,10 +74,9 @@ class FirebaseAuthService implements AuthBase {
       return null;
     } else {
       bool IsFromUniversity = false;
-      if (user.email!.contains("@cumhuriyet.edu.tr")) 
-        IsFromUniversity = true;
+      if (user.email!.contains("@cumhuriyet.edu.tr")) IsFromUniversity = true;
 
-String? url;
+      String? url;
       DocumentSnapshot? fbuser = await FirebaseFirestore.instance
           .collection("users")
           .doc(user.uid)
@@ -81,13 +85,12 @@ String? url;
         url = fbuser["ProfileURL"].toString();
       else
         url = null;
-        return CuTalkUser(
-            UserID: user.uid,
-            Email: user.email!,
-            ProfileURL: url,
-            UserName: user.displayName ?? null,
-            IsFromUniversity: IsFromUniversity ? true : false);
-      }
+      return CuTalkUser(
+          UserID: user.uid,
+          Email: user.email!,
+          ProfileURL: url,
+          UserName: user.displayName ?? null,
+          IsFromUniversity: IsFromUniversity ? true : false);
     }
-  
+  }
 }

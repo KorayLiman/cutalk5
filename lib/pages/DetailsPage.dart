@@ -303,7 +303,10 @@ class _DetailsPageState extends State<DetailsPage> {
                                           return ListTile(
                                               onLongPress: () {
                                                 if (currentComment.OwnerID ==
-                                                    _usermodel.user!.UserID || _usermodel.user!.Email == "2020123170@cumhuriyet.edu.tr") {
+                                                        _usermodel
+                                                            .user!.UserID ||
+                                                    _usermodel.user!.Email ==
+                                                        "2020123170@cumhuriyet.edu.tr") {
                                                   PlatformSensitiveDeleteButton(
                                                     title: "Sil",
                                                     content:
@@ -446,15 +449,17 @@ class _DetailsPageState extends State<DetailsPage> {
                                   CommentString = Value;
                                 },
                                 onFieldSubmitted: (value) async {
+                                  _textEditingController.clear();
                                   var doc = await FirebaseFirestore.instance
                                       .collection("chats")
                                       .doc(widget.chat.ChatID)
                                       .set({
                                     "CommentCount": FieldValue.increment(1)
                                   }, SetOptions(merge: true));
-                                  _UploadComment();
+                                  await _UploadComment();
                                   FocusManager.instance.primaryFocus?.unfocus();
-                                  _textEditingController.clear();
+                                  
+                                  CommentString = null;
                                   setState(() {});
                                 },
                                 decoration: InputDecoration(
@@ -473,15 +478,17 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: IconButton(
                               color: const Color.fromRGBO(88, 117, 251, 1),
                               onPressed: () async {
+                                _textEditingController.clear();
                                 var doc = await FirebaseFirestore.instance
                                     .collection("chats")
                                     .doc(widget.chat.ChatID)
                                     .set({
                                   "CommentCount": FieldValue.increment(1)
                                 }, SetOptions(merge: true));
-                                _UploadComment();
+                                await _UploadComment();
                                 FocusManager.instance.primaryFocus?.unfocus();
-                                _textEditingController.clear();
+                                
+                                CommentString = null;
                                 setState(() {});
                               },
                               icon: Icon(
@@ -510,7 +517,7 @@ class _DetailsPageState extends State<DetailsPage> {
     return await _chatmodel.GetAllComments(widget.chat.ChatID);
   }
 
-  void _UploadComment() async {
+  Future<void> _UploadComment() async {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
 
     if (CommentString != null && CommentString!.length > 0) {
