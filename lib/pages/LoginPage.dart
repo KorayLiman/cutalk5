@@ -111,7 +111,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 80.0, left: 30),
+                padding: const EdgeInsets.only(top: 40.0),
+                child: Text(
+                  "Eğer cumhuriyet üniversitesi mensubu iseniz üniversite özel kısmına yazabilmeniz için lütfen üniversite mailinizle kayıt olunuz!!!",
+                  style: GoogleFonts.ubuntu(
+                      color: Colors.red, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0, left: 30),
                 child: Text(
                   "Email",
                   style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 20),
@@ -606,14 +615,7 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushAndRemoveUntil(context, route, (route) => false);
           } catch (error) {
             print(error);
-            print(error);
-
-            print(error);
-            print(error);
-            print(error);
-            print(error);
-            print(error);
-            print(error);
+            
 
             PlatformSensitiveAlertDialog(
                     title: "Hata",
