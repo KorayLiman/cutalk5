@@ -12,6 +12,7 @@ class FirebaseAuthService implements AuthBase {
       String name, String email, String pw) async {
     UserCredential credential = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: pw);
+
     await credential.user!.sendEmailVerification();
 
     return await _userFromFirebase(credential.user);

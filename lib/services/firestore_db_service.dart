@@ -18,6 +18,7 @@ class FireStoreDBService implements DBBase {
 
   @override
   Future<bool> SaveUser(CuTalkUser Cuuser) async {
+    
     await _firestore.collection("users").doc(Cuuser.UserID).set(Cuuser.ToMap());
     await _firestore
         .collection("users")

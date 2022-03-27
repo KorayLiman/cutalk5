@@ -119,6 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              Text(
+                "Eğer hesabınıza giriş yapamıyorsanız veya başkası tarafından alınmışsa şifremi unuttum'a tıklayarak şifrenizi alabilirsiniz!!!",
+                style: GoogleFonts.ubuntu(
+                    color: Colors.orange, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 40.0, left: 30),
                 child: Text(
@@ -615,7 +621,6 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushAndRemoveUntil(context, route, (route) => false);
           } catch (error) {
             print(error);
-            
 
             PlatformSensitiveAlertDialog(
                     title: "Hata",

@@ -75,7 +75,8 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
             } else {
               PlatformSensitiveAlertDialog(
                 title: "Email onayı",
-                content: "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
+                content:
+                    "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız",
                 mainButtonText: "Tamam",
               ).show(context);
             }
@@ -138,12 +139,11 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                   "2020123170@cumhuriyet.edu.tr") {
                             PlatformSensitiveDeleteButton(
                               title: "Sil",
-                             
                               callback: () {
                                 FirebaseFirestore.instance
-              .collection("chats")
-              .doc(CurrentChat.ChatID)
-              .delete();
+                                    .collection("chats")
+                                    .doc(CurrentChat.ChatID)
+                                    .delete();
                                 setState(() {});
                               },
                               content: "Sohbeti silmek istiyor musunuz?",
@@ -211,6 +211,5 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
     final _usermodel = Provider.of<UserModel>(context, listen: false);
     await Future.delayed(const Duration(seconds: 1));
     setState(() {});
-    
   }
 }

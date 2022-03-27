@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
         })
       ],
       child: MaterialApp(
-          themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
           title: 'Cü Talk',
           home: LandingPage()),

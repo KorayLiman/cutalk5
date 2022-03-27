@@ -11,6 +11,7 @@ import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 
@@ -449,7 +450,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   CommentString = Value;
                                 },
                                 onFieldSubmitted: (value) async {
-                                  _textEditingController.clear();
+                                  if(FirebaseAuth.instance.currentUser!.emailVerified){
+                                    _textEditingController.clear();
                                   var doc = await FirebaseFirestore.instance
                                       .collection("chats")
                                       .doc(widget.chat.ChatID)
@@ -460,7 +462,10 @@ class _DetailsPageState extends State<DetailsPage> {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   
                                   CommentString = null;
-                                  setState(() {});
+                                  setState(() {});}
+                                  else{PlatformSensitiveAlertDialog(title: "Mail Onayı",content: "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                  mainButtonText: "Tamam",).show(context);}
+                                  
                                 },
                                 decoration: InputDecoration(
                                     hintText: "Yorum yap",
@@ -477,7 +482,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: IconButton(
                               color: const Color.fromRGBO(88, 117, 251, 1),
-                              onPressed: () async {
+                              onPressed: () async {if(FirebaseAuth.instance.currentUser!.emailVerified){
                                 _textEditingController.clear();
                                 var doc = await FirebaseFirestore.instance
                                     .collection("chats")
@@ -490,6 +495,9 @@ class _DetailsPageState extends State<DetailsPage> {
                                 
                                 CommentString = null;
                                 setState(() {});
+                              }else{PlatformSensitiveAlertDialog(title: "Mail Onayı",content: "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                  mainButtonText: "Tamam",).show(context);}
+                                
                               },
                               icon: Icon(
                                 Icons.send,

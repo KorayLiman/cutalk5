@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/pages/Profile_Page.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
@@ -87,7 +88,7 @@ class _GeneralPageState extends State<GeneralPage>
                       });
                       print(value);
                     },
-                    title: const Text("Koyu mod"),
+                    title: const Text("Koyu mod (Yakında)"),
                   ),
             const AboutListTile(
               child: Text("Hakkında ve uyarılar"),
