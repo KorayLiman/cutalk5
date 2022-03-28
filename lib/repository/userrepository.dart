@@ -58,18 +58,6 @@ class UserRepository implements AuthBase {
     return await _fireStoreDBService.ReadUser(user!.UserID);
   }
 
-  @override
-  Future<CuTalkUser?> signinwithGoogle() async {
-    CuTalkUser? user = await _firebaseAuthService.signinwithGoogle();
-
-    bool result = await _fireStoreDBService.SaveUser(user!);
-    if (result) {
-      return await _fireStoreDBService.ReadUser(user.UserID);
-    } else {
-      return null;
-    }
-  }
-
   Future<String> uploadFile(String userId, String fileType, File? image) async {
     String ProfilePhotoUrl =
         await _fireBaseStorageService.uploadFile(userId, fileType, image!);
@@ -82,5 +70,28 @@ class UserRepository implements AuthBase {
     String url = await _fireBaseStorageService.uploadChatFile(userID, s, i);
     await _fireStoreDBService.updateChatPhotos(userID, url, ChatID);
     return url;
+  }
+
+  @override
+  Future<CuTalkUser?> signinwithGoogle() async {
+    CuTalkUser? user = await _firebaseAuthService.signinwithGoogle();
+
+    bool result = await _fireStoreDBService.SaveUser(user!);
+    if (result) {
+      return await _fireStoreDBService.ReadUser(user.UserID);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<CuTalkUser?> signinwithApple() async {
+    CuTalkUser? user = await _firebaseAuthService.signinwithApple();
+    bool result = await _fireStoreDBService.SaveUser(user!);
+    if (result) {
+      return await _fireStoreDBService.ReadUser(user.UserID);
+    } else {
+      return null;
+    }
   }
 }

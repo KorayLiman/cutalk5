@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/services/authbase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -49,27 +52,6 @@ class FirebaseAuthService implements AuthBase {
     return await _userFromFirebase(credential.user);
   }
 
-  @override
-  Future<CuTalkUser?> signinwithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      UserCredential crd =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      return await _userFromFirebase(crd.user);
-    } on PlatformException catch (error) {
-      print(error);
-      return null;
-    }
-  }
-
   Future<CuTalkUser?> _userFromFirebase(User? user) async {
     if (user == null) {
       return null;
@@ -92,6 +74,49 @@ class FirebaseAuthService implements AuthBase {
           ProfileURL: url,
           UserName: user.displayName ?? null,
           IsFromUniversity: IsFromUniversity ? true : false);
+    }
+  }
+
+  @override
+  Future<CuTalkUser?> signinwithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      UserCredential crd =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return await _userFromFirebase(crd.user);
+    } on PlatformException catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
+  @override
+  Future<CuTalkUser?> signinwithApple() async {
+    try {
+
+      if (Platform.isIOS) {
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+        );
+         print(credential);
+         UserCredential crd = await FirebaseAuth.instance.s;
+
+return await _userFromFirebase(credential)
+
+      }
+    } catch (error) {
+      print(error);
     }
   }
 }

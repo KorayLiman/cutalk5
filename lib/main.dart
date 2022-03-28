@@ -1,6 +1,7 @@
 import 'package:ctlk2/firebase_options.dart';
 import 'package:ctlk2/locator.dart';
 import 'package:ctlk2/pages/LandingPage.dart';
+import 'package:ctlk2/services/applesignin.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +19,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+  runApp(Provider<AppleSignInAvailable>.value(
+    value: appleSignInAvailable,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

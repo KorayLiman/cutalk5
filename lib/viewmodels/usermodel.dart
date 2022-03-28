@@ -75,18 +75,7 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
-  @override
-  Future<CuTalkUser?> signinwithGoogle() async {
-    try {
-      viewstate = ViewState.busy;
-      _user = await _userRepository.signinwithGoogle();
-      return _user;
-    } catch (error) {
-      return null;
-    } finally {
-      viewstate = ViewState.idle;
-    }
-  }
+  
 
   @override
   Future<bool> signOut() async {
@@ -105,6 +94,31 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
   Future<String> uploadChatFile(String userID, String s, File i,String chatID) async{
      var link = await _userRepository.uploadChatFile(userID, s, i,chatID);
     return link;
+  }
+
+@override
+  Future<CuTalkUser?> signinwithGoogle() async {
+    try {
+      viewstate = ViewState.busy;
+      _user = await _userRepository.signinwithGoogle();
+      return _user;
+    } catch (error) {
+      return null;
+    } finally {
+      viewstate = ViewState.idle;
+    }
+  }
+  @override
+  Future<CuTalkUser?> signinwithApple() async{
+    try {
+      viewstate = ViewState.busy;
+      _user = await _userRepository.signinwithApple();
+      return _user;
+    } catch (error) {
+      return null;
+    } finally {
+      viewstate = ViewState.idle;
+    }
   }
 
   

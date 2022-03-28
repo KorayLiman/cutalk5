@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/pages/GeneralPage.dart';
 import 'package:ctlk2/pages/PasswordResetPage.dart';
+import 'package:ctlk2/services/applesignin.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:email_validator/email_validator.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -46,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appleSignInAvailable =
+        Provider.of<AppleSignInAvailable>(context, listen: false);
     final _usermodel = Provider.of<UserModel>(context);
     _buttonText = _formType == FormType.login ? "Giriş yap" : "Kayıt ol";
     _bottomtextleft =
@@ -290,7 +294,15 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundImage:
                               AssetImage("assets/images/google.png"),
                           backgroundColor: Colors.white,
-                        ))
+                        )),
+
+                    Expanded(
+                        child: SignInWithAppleButton(
+                      onPressed: () async {
+                       
+                      },
+                      style: SignInWithAppleButtonStyle.white,
+                    ))
                   ],
                 ),
               ),
@@ -537,7 +549,7 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundImage:
                               AssetImage("assets/images/google.png"),
                           backgroundColor: Colors.white,
-                        ))
+                        )),
                   ],
                 ),
               ),
