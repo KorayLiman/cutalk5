@@ -72,7 +72,7 @@ class FirebaseAuthService implements AuthBase {
           UserID: user.uid,
           Email: user.email!,
           ProfileURL: url,
-          UserName: user.displayName ?? null,
+          UserName: user.displayName ?? "İsim alınamadı",
           IsFromUniversity: IsFromUniversity ? true : false);
     }
   }
@@ -101,19 +101,22 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<CuTalkUser?> signinwithApple() async {
     try {
-
       if (Platform.isIOS) {
-        final credential = await SignInWithApple.getAppleIDCredential(
+        final acredential = await SignInWithApple.getAppleIDCredential(
           scopes: [
             AppleIDAuthorizationScopes.email,
             AppleIDAuthorizationScopes.fullName,
           ],
         );
-         print(credential);
-         UserCredential crd = await FirebaseAuth.instance.s;
+        print(acredential);
 
-return await _userFromFirebase(credential)
-
+        final oAuthProvider = OAuthProvider("apple.com");
+        final credential = oAuthProvider.credential(
+            idToken: acredential.identityToken,
+            accessToken: acredential.authorizationCode);
+        UserCredential crd =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        return await _userFromFirebase(crd.user);
       }
     } catch (error) {
       print(error);

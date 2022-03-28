@@ -48,8 +48,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appleSignInAvailable =
-        Provider.of<AppleSignInAvailable>(context, listen: false);
     final _usermodel = Provider.of<UserModel>(context);
     _buttonText = _formType == FormType.login ? "Giriş yap" : "Kayıt ol";
     _bottomtextleft =
@@ -296,13 +294,13 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: Colors.white,
                         )),
 
-                    Expanded(
-                        child: SignInWithAppleButton(
-                      onPressed: () async {
-                       
-                      },
-                      style: SignInWithAppleButtonStyle.white,
-                    ))
+                    // Expanded(
+                    //     child: SignInWithAppleButton(
+                    //   onPressed: () async {
+
+                    //   },
+                    //   style: SignInWithAppleButtonStyle.white,
+                    // ))
                   ],
                 ),
               ),

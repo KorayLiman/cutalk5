@@ -19,11 +19,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-  runApp(Provider<AppleSignInAvailable>.value(
-    value: appleSignInAvailable,
-    child: MyApp(),
-  ));
+ 
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
