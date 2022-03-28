@@ -105,7 +105,8 @@ class _GeneralPageState extends State<GeneralPage>
                   height: 4,
                 ),
                 Text(
-                    "3- Uygulamanın amacı öğrencilerin öğrencilik hayatını kolaylaştırmak ve aramızdaki iletişimi kolaylaştırmaktır")
+                    "3- Uygulamanın amacı öğrencilerin öğrencilik hayatını kolaylaştırmak ve aramızdaki iletişimi kolaylaştırmaktır"),
+                Text("Icons from https://icons8.com")
               ],
             ),
             ListTile(
