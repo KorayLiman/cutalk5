@@ -83,4 +83,9 @@ class ChatModel with ChangeNotifier implements DBBase {
   Future<List<Comment>> GetAllComments(String ChatID) async {
     return await _chatRepository.GetAllComments(ChatID);
   }
+
+  @override
+  Future<void> DeleteAccount() async{
+   
+  }
 }

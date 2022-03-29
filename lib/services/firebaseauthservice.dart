@@ -122,4 +122,9 @@ class FirebaseAuthService implements AuthBase {
       print(error);
     }
   }
+
+  DeleteAccount() async {
+    await FirebaseAuth.instance.currentUser!.delete();
+    
+  }
 }

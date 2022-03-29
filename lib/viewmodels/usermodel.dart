@@ -34,16 +34,21 @@ class UserModel with ChangeNotifier implements AuthBase {
     return sonuc;
   }
 
-Future<String> uploadFile(String userId, String fileType, File? image) async {
+  Future<String> uploadFile(String userId, String fileType, File? image) async {
     var link = await _userRepository.uploadFile(userId, fileType, image);
     return link;
   }
+
   @override
   Future<CuTalkUser?> createUserWithEmailandPassword(
-      String name,String email, String pw,) async {
+    String name,
+    String email,
+    String pw,
+  ) async {
     try {
       viewstate = ViewState.busy;
-      _user = await _userRepository.createUserWithEmailandPassword(name,email, pw);
+      _user =
+          await _userRepository.createUserWithEmailandPassword(name, email, pw);
       return _user;
     } finally {
       viewstate = ViewState.idle;
@@ -75,8 +80,6 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
-  
-
   @override
   Future<bool> signOut() async {
     try {
@@ -91,12 +94,13 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
-  Future<String> uploadChatFile(String userID, String s, File i,String chatID) async{
-     var link = await _userRepository.uploadChatFile(userID, s, i,chatID);
+  Future<String> uploadChatFile(
+      String userID, String s, File i, String chatID) async {
+    var link = await _userRepository.uploadChatFile(userID, s, i, chatID);
     return link;
   }
 
-@override
+  @override
   Future<CuTalkUser?> signinwithGoogle() async {
     try {
       viewstate = ViewState.busy;
@@ -108,8 +112,9 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
       viewstate = ViewState.idle;
     }
   }
+
   @override
-  Future<CuTalkUser?> signinwithApple() async{
+  Future<CuTalkUser?> signinwithApple() async {
     try {
       viewstate = ViewState.busy;
       _user = await _userRepository.signinwithApple();
@@ -121,5 +126,14 @@ Future<String> uploadFile(String userId, String fileType, File? image) async {
     }
   }
 
-  
+  Future<void> DeleteAccount() async {
+    try {
+      viewstate = ViewState.busy;
+      await _userRepository.DeleteAccount();
+    } catch (error) {
+      print(error);
+    } finally {
+      viewstate = ViewState.idle;
+    }
+  }
 }

@@ -54,4 +54,9 @@ class ChatRepository implements DBBase {
   Future<List<Comment>> GetAllComments(String ChatID) async {
     return await _fireStoreDBService.GetAllComments(ChatID);
   }
+
+  @override
+  Future<void> DeleteAccount() async{
+    
+  }
 }

@@ -5,6 +5,7 @@ import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Discussion_General.dart';
 import 'package:ctlk2/widgets/Discussion_Private.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -226,7 +227,25 @@ class _GeneralPageState extends State<GeneralPage>
                   )
                 ],
               ),
-            ))
+            )),
+            TextButton(
+                onPressed: () {
+                  PlatformSensitiveDeleteButton(
+                          title: "Hesabımı sil",
+                          callback: () {
+                            _usermodel.DeleteAccount();
+                            _usermodel.signOut();
+                          },
+                          content:
+                              "Gerçekten hesabınızı silmek istediğinize emin misiniz?(Bu işlemin geri dönüşü yoktur)",
+                          mainButtonText: "Sil",
+                          secondaryButtonText: "Vazgeç")
+                      .show(context);
+                },
+                child: Text(
+                  "Hesabımı sil",
+                  style: GoogleFonts.ubuntu(color: Colors.red),
+                ))
           ],
         )),
         backgroundColor: Colors.grey.shade100,
