@@ -294,13 +294,14 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: Colors.white,
                         )),
 
-                    // Expanded(
-                    //     child: SignInWithAppleButton(
-                    //   onPressed: () async {
-
-                    //   },
-                    //   style: SignInWithAppleButtonStyle.white,
-                    // ))
+                    Expanded(
+                        child: SignInWithAppleButton(
+                      onPressed: () async {
+                        if(Platform.isIOS)
+                        await _usermodel.signinwithApple();
+                      },
+                      style: SignInWithAppleButtonStyle.white,
+                    ))
                   ],
                 ),
               ),

@@ -232,9 +232,9 @@ class _GeneralPageState extends State<GeneralPage>
                 onPressed: () {
                   PlatformSensitiveDeleteButton(
                           title: "Hesabımı sil",
-                          callback: () {
-                            _usermodel.DeleteAccount();
-                            _usermodel.signOut();
+                          callback: () async{
+                            await _usermodel.DeleteAccount();
+                            await _usermodel.signOut();
                           },
                           content:
                               "Gerçekten hesabınızı silmek istediğinize emin misiniz?(Bu işlemin geri dönüşü yoktur)",
