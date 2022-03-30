@@ -17,7 +17,7 @@ class CuTalkUser {
       "UserID": UserID,
       "IsFromUniversity":IsFromUniversity,
       "Email": Email,
-      "UserName": UserName ?? "İsim alınamadı",
+      "UserName": UserName ?? "Apple User",
       "ProfileURL": ProfileURL ??
           "https://scontent.fist4-1.fna.fbcdn.net/v/t1.6435-9/33248868_2139061783009197_3860205585035165696_n.png?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=ESP2-TU7d68AX-7r8Lg&_nc_ht=scontent.fist4-1.fna&oh=00_AT_kNqR2wFyPzFibQCpC57MtmhAdlwqFfI-x6RnpHVqGlA&oe=626945C9"
     };
