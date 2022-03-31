@@ -144,6 +144,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                     .collection("chats")
                                     .doc(CurrentChat.ChatID)
                                     .delete();
+                                    
                                 setState(() {});
                               },
                               content: "Sohbeti silmek istiyor musunuz?",

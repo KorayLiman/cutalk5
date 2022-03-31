@@ -6,7 +6,9 @@ import 'package:ctlk2/pages/GeneralPage.dart';
 import 'package:ctlk2/pages/PasswordResetPage.dart';
 import 'package:ctlk2/services/applesignin.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
+import 'package:ctlk2/widgets/Eulawidget.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
+import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -297,8 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(
                         child: SignInWithAppleButton(
                       onPressed: () async {
-                        if(Platform.isIOS)
-                        await _usermodel.signinwithApple();
+                        if (Platform.isIOS) await _usermodel.signinwithApple();
                       },
                       style: SignInWithAppleButtonStyle.white,
                     ))
@@ -578,69 +579,81 @@ class _LoginPageState extends State<LoginPage> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      if (formType == FormType.login) {
-        if (email == null ||
-            !email!.contains("@") ||
-            password == null ||
-            password!.length < 6) {
-          PlatformSensitiveAlertDialog(
-            title: "Hata",
-            content: "Bilgileriniz yanlış girildi",
-            mainButtonText: "Tamam",
-          ).show(context);
-        } else {
-          try {
-            CuTalkUser? LoggedInUser =
-                await _userModel.signinwithEmailAndPassword(email!, password!);
-            Route route = Platform.isIOS
-                ? CupertinoPageRoute(builder: ((context) => GeneralPage()))
-                : MaterialPageRoute(
-                    builder: (context) => GeneralPage(),
-                  );
-            Navigator.pushAndRemoveUntil(context, route, (route) => false);
-          } catch (error) {
-            PlatformSensitiveAlertDialog(
-                    title: "Kullanıcı Bulunamadı",
-                    content:
-                        "Belirtilen mail ve şifre ile eşleşen kullanıcı bulunamadı",
-                    mainButtonText: "Tamam")
-                .show(context);
-          }
-        }
-      } else {
-        if (name == null ||
-            name!.length < 3 ||
-            email == null ||
-            !email!.contains("@") ||
-            password == null ||
-            password!.length < 6) {
-          PlatformSensitiveAlertDialog(
-                  title: "Hata",
-                  content: "Bilgileriniz yanlış girildi",
-                  mainButtonText: "Tamam")
-              .show(context);
-        } else {
-          try {
-            CuTalkUser? RegisteredUser = await _userModel
-                .createUserWithEmailandPassword(name!, email!, password!);
-            Route route = Platform.isIOS
-                ? CupertinoPageRoute(
-                    builder: ((context) => const GeneralPage()))
-                : MaterialPageRoute(
-                    builder: (context) => const GeneralPage(),
-                  );
-            Navigator.pushAndRemoveUntil(context, route, (route) => false);
-          } catch (error) {
-            print(error);
+      EulaButton(
+        content: "1- Küfür ve hakaret içerikli paylaşımlar yasaktır.\n" +
+            "2- Vahşet, çıplaklık ve ahlak dışı paylaşımlar(fotoğraf, sohbet, yorum) yasaktır.\n" +
+            "3- Yukarıda belirtilen şartlara aykırı davranışta bulunan kişilerin hesapları engellenir",
+        secondaryButtonText: "Kabul etmiyorum",
+        mainButtonText: "Kabul ediyorum",
+        title: "Şartlar",
+        callback: () async {
+          Navigator.pop(context);
 
-            PlatformSensitiveAlertDialog(
-                    title: "Hata",
-                    content: "Mail kullanılıyor",
-                    mainButtonText: "Tamam")
-                .show(context);
+          if (formType == FormType.login) {
+            if (email == null ||
+                !email!.contains("@") ||
+                password == null ||
+                password!.length < 6) {
+              PlatformSensitiveAlertDialog(
+                title: "Hata",
+                content: "Bilgileriniz yanlış girildi",
+                mainButtonText: "Tamam",
+              ).show(context);
+            } else {
+              try {
+                CuTalkUser? LoggedInUser = await _userModel
+                    .signinwithEmailAndPassword(email!, password!);
+                Route route = Platform.isIOS
+                    ? CupertinoPageRoute(builder: ((context) => GeneralPage()))
+                    : MaterialPageRoute(
+                        builder: (context) => GeneralPage(),
+                      );
+                Navigator.pushAndRemoveUntil(context, route, (route) => false);
+              } catch (error) {
+                PlatformSensitiveAlertDialog(
+                        title: "Kullanıcı Bulunamadı",
+                        content:
+                            "Belirtilen mail ve şifre ile eşleşen kullanıcı bulunamadı",
+                        mainButtonText: "Tamam")
+                    .show(context);
+              }
+            }
+          } else {
+            if (name == null ||
+                name!.length < 3 ||
+                email == null ||
+                !email!.contains("@") ||
+                password == null ||
+                password!.length < 6) {
+              PlatformSensitiveAlertDialog(
+                      title: "Hata",
+                      content: "Bilgileriniz yanlış girildi",
+                      mainButtonText: "Tamam")
+                  .show(context);
+            } else {
+              try {
+                CuTalkUser? RegisteredUser = await _userModel
+                    .createUserWithEmailandPassword(name!, email!, password!);
+                Route route = Platform.isIOS
+                    ? CupertinoPageRoute(
+                        builder: ((context) => const GeneralPage()))
+                    : MaterialPageRoute(
+                        builder: (context) => const GeneralPage(),
+                      );
+                Navigator.pushAndRemoveUntil(context, route, (route) => false);
+              } catch (error) {
+                print(error);
+
+                PlatformSensitiveAlertDialog(
+                        title: "Hata",
+                        content: "Mail kullanılıyor",
+                        mainButtonText: "Tamam")
+                    .show(context);
+              }
+            }
           }
-        }
-      }
+        },
+      ).show(context);
     } else
       PlatformSensitiveAlertDialog(
               title: "İnternet yok",

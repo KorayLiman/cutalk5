@@ -151,6 +151,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                                     .collection("chats")
                                     .doc(CurrentChat.ChatID)
                                     .delete();
+                                    
                                 setState(() {});
                               },
                               content: "Sohbeti silmek istiyor musunuz?",

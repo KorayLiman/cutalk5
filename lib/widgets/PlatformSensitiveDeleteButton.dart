@@ -22,8 +22,8 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
       required this.mainButtonText,
       required this.secondaryButtonText});
 
-  Future<bool> show(BuildContext context) async {
-    return Platform.isIOS
+  Future<void> show(BuildContext context) async {
+     Platform.isIOS
         ? await showCupertinoDialog(
             context: context, builder: (context) => this)
         : await showDialog(context: context, builder: (context) => this);
@@ -59,7 +59,7 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
         child: Text(mainButtonText),
         onPressed: () {
           
-          callback();
+           callback();
           Navigator.pop(context);
         },
       ));
@@ -72,7 +72,7 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
       AllButtons.add(TextButton(
           onPressed: () {
             
-                callback();
+               callback();
             Navigator.pop(context);
           },
           child: Text(mainButtonText)));

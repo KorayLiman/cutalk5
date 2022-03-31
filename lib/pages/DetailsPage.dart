@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/SwearBlocker.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/Comment.dart';
+import 'package:ctlk2/models/Reports.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/pages/FullScreenImage.dart';
 
@@ -35,7 +36,9 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   final DateFormat formatter = DateFormat('dd/MM/yyyy');
   final ImagePicker _picker = ImagePicker();
+
   List<File> Imgs = [];
+  String? Subject;
   final TextEditingController _textEditingController = TextEditingController();
   String? CommentString;
   @override
@@ -83,7 +86,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                             ),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width / 2.1,
@@ -106,6 +109,137 @@ class _DetailsPageState extends State<DetailsPage> {
                                     style: GoogleFonts.ubuntu(),
                                   ),
                                 ],
+                              ),
+                            ),
+                            Expanded(
+                              child: PopupMenuButton(
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem(
+                                      child: Text(
+                                        "Rapor et",
+                                        style: GoogleFonts.ubuntu(
+                                            color: Colors.red),
+                                      ),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return Container();
+                                            });
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 30.0,
+                                                        vertical: 80),
+                                                child: Material(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  child: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: double.infinity,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white
+                                                            .withOpacity(0.8),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16)),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "Rapor et",
+                                                          style: GoogleFonts
+                                                              .ubuntu(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 21),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(12.0),
+                                                          child: TextFormField(
+                                                            autofocus: true,
+                                                            autovalidateMode:
+                                                                AutovalidateMode
+                                                                    .onUserInteraction,
+                                                            validator: (value) {
+                                                              if (value!
+                                                                      .length <
+                                                                  1) {
+                                                                return "Konu 1 harften büyük olmalı";
+                                                              }
+                                                            },
+                                                            onChanged: (value) {
+                                                              Subject = value;
+                                                            },
+                                                            maxLines: 3,
+                                                            decoration: InputDecoration(
+                                                                hintText:
+                                                                    "Konu",
+                                                                fillColor:
+                                                                    Colors
+                                                                        .white,
+                                                                filled: true,
+                                                                border: OutlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide
+                                                                            .none)),
+                                                          ),
+                                                        ),
+                                                        ElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              if (Subject !=
+                                                                  null) {
+                                                                Report NewReport = Report(
+                                                                    Subject:
+                                                                        Subject!,
+                                                                    ReportedChatID:
+                                                                        widget
+                                                                            .chat
+                                                                            .ChatID);
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "reports")
+                                                                    .add(NewReport
+                                                                        .ToMap());
+                                                                Subject = null;
+                                                                PlatformSensitiveAlertDialog(
+                                                                  title:
+                                                                      "Başarılı",
+                                                                  content:
+                                                                      "Rapor incelenmek üzere gönderildi",
+                                                                  mainButtonText:
+                                                                      "Tamam",
+                                                                ).show(context);
+                                                              }
+                                                            },
+                                                            child: const Text(
+                                                                "Gönder"))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            });
+                                      },
+                                    )
+                                  ];
+                                },
                               ),
                             )
                           ],
@@ -450,22 +584,29 @@ class _DetailsPageState extends State<DetailsPage> {
                                   CommentString = Value;
                                 },
                                 onFieldSubmitted: (value) async {
-                                  if(FirebaseAuth.instance.currentUser!.emailVerified){
+                                  if (FirebaseAuth
+                                      .instance.currentUser!.emailVerified) {
                                     _textEditingController.clear();
-                                  var doc = await FirebaseFirestore.instance
-                                      .collection("chats")
-                                      .doc(widget.chat.ChatID)
-                                      .set({
-                                    "CommentCount": FieldValue.increment(1)
-                                  }, SetOptions(merge: true));
-                                  await _UploadComment();
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  
-                                  CommentString = null;
-                                  setState(() {});}
-                                  else{PlatformSensitiveAlertDialog(title: "Mail Onayı",content: "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
-                                  mainButtonText: "Tamam",).show(context);}
-                                  
+                                    var doc = await FirebaseFirestore.instance
+                                        .collection("chats")
+                                        .doc(widget.chat.ChatID)
+                                        .set({
+                                      "CommentCount": FieldValue.increment(1)
+                                    }, SetOptions(merge: true));
+                                    await _UploadComment();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+
+                                    CommentString = null;
+                                    setState(() {});
+                                  } else {
+                                    PlatformSensitiveAlertDialog(
+                                      title: "Mail Onayı",
+                                      content:
+                                          "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                      mainButtonText: "Tamam",
+                                    ).show(context);
+                                  }
                                 },
                                 decoration: InputDecoration(
                                     hintText: "Yorum yap",
@@ -482,22 +623,29 @@ class _DetailsPageState extends State<DetailsPage> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: IconButton(
                               color: const Color.fromRGBO(88, 117, 251, 1),
-                              onPressed: () async {if(FirebaseAuth.instance.currentUser!.emailVerified){
-                                _textEditingController.clear();
-                                var doc = await FirebaseFirestore.instance
-                                    .collection("chats")
-                                    .doc(widget.chat.ChatID)
-                                    .set({
-                                  "CommentCount": FieldValue.increment(1)
-                                }, SetOptions(merge: true));
-                                await _UploadComment();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                
-                                CommentString = null;
-                                setState(() {});
-                              }else{PlatformSensitiveAlertDialog(title: "Mail Onayı",content: "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
-                                  mainButtonText: "Tamam",).show(context);}
-                                
+                              onPressed: () async {
+                                if (FirebaseAuth
+                                    .instance.currentUser!.emailVerified) {
+                                  _textEditingController.clear();
+                                  var doc = await FirebaseFirestore.instance
+                                      .collection("chats")
+                                      .doc(widget.chat.ChatID)
+                                      .set({
+                                    "CommentCount": FieldValue.increment(1)
+                                  }, SetOptions(merge: true));
+                                  await _UploadComment();
+                                  FocusManager.instance.primaryFocus?.unfocus();
+
+                                  CommentString = null;
+                                  setState(() {});
+                                } else {
+                                  PlatformSensitiveAlertDialog(
+                                    title: "Mail Onayı",
+                                    content:
+                                        "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                    mainButtonText: "Tamam",
+                                  ).show(context);
+                                }
                               },
                               icon: Icon(
                                 Icons.send,

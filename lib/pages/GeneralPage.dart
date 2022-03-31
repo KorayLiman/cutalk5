@@ -70,27 +70,27 @@ class _GeneralPageState extends State<GeneralPage>
                 ),
                 accountName: Text(_usermodel.user!.UserName!),
                 accountEmail: Text(_usermodel.user!.Email)),
-            Platform.isIOS
-                ? CupertinoFormRow(
-                    child: CupertinoSwitch(
-                        value: _isDarkModeEnabled,
-                        onChanged: (value) {
-                          setState(() {
-                            _isDarkModeEnabled = value;
-                          });
-                        }),
-                    prefix: const Text("Koyu mod"),
-                  )
-                : SwitchListTile(
-                    value: _isDarkModeEnabled,
-                    onChanged: (value) {
-                      setState(() {
-                        _isDarkModeEnabled = value;
-                      });
-                      print(value);
-                    },
-                    title: const Text("Koyu mod (Yakında)"),
-                  ),
+            // Platform.isIOS
+            //     ? CupertinoFormRow(
+            //         child: CupertinoSwitch(
+            //             value: _isDarkModeEnabled,
+            //             onChanged: (value) {
+            //               setState(() {
+            //                 _isDarkModeEnabled = value;
+            //               });
+            //             }),
+            //         prefix: const Text("Koyu mod"),
+            //       )
+            //     : SwitchListTile(
+            //         value: _isDarkModeEnabled,
+            //         onChanged: (value) {
+            //           setState(() {
+            //             _isDarkModeEnabled = value;
+            //           });
+            //           print(value);
+            //         },
+            //         title: const Text("Koyu mod (Yakında)"),
+            //       ),
             const AboutListTile(
               child: Text("Hakkında ve uyarılar"),
               applicationName: "Cü Talk",
@@ -232,7 +232,7 @@ class _GeneralPageState extends State<GeneralPage>
                 onPressed: () {
                   PlatformSensitiveDeleteButton(
                           title: "Hesabımı sil",
-                          callback: () async{
+                          callback: () async {
                             await _usermodel.DeleteAccount();
                             await _usermodel.signOut();
                           },
