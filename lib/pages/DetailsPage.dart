@@ -146,8 +146,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                             .width,
                                                     height: double.infinity,
                                                     decoration: BoxDecoration(
-                                                        color: Colors.white
-                                                            .withOpacity(0.8),
+                                                        color: Colors.grey.shade200,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(16)),
@@ -436,6 +435,121 @@ class _DetailsPageState extends State<DetailsPage> {
                                           var currentComment =
                                               snapshot.data![index];
                                           return ListTile(
+                                              trailing: PopupMenuButton(
+                                                itemBuilder: (context) {
+                                                  return [
+                                                    PopupMenuItem(
+                                                      child: Text(
+                                                        "Rapor et",
+                                                        style:
+                                                            GoogleFonts.ubuntu(
+                                                                color:
+                                                                    Colors.red),
+                                                      ),
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        await showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Container();
+                                                            });
+                                                        await showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        30.0,
+                                                                    vertical:
+                                                                        80),
+                                                                child: Material(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              16),
+                                                                  child:
+                                                                      Container(
+                                                                    width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                    height: double
+                                                                        .infinity,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .grey.shade200,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(16)),
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Text(
+                                                                          "Rapor et",
+                                                                          style: GoogleFonts.ubuntu(
+                                                                              color: Colors.black,
+                                                                              fontSize: 21),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(12.0),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            autofocus:
+                                                                                true,
+                                                                            autovalidateMode:
+                                                                                AutovalidateMode.onUserInteraction,
+                                                                            validator:
+                                                                                (value) {
+                                                                              if (value!.length < 1) {
+                                                                                return "Konu 1 harften büyük olmalı";
+                                                                              }
+                                                                            },
+                                                                            onChanged:
+                                                                                (value) {
+                                                                              Subject = value;
+                                                                            },
+                                                                            maxLines:
+                                                                                3,
+                                                                            decoration: InputDecoration(
+                                                                                hintText: "Konu",
+                                                                                fillColor: Colors.white,
+                                                                                filled: true,
+                                                                                border: OutlineInputBorder(borderSide: BorderSide.none)),
+                                                                          ),
+                                                                        ),
+                                                                        ElevatedButton(
+                                                                            onPressed:
+                                                                                () async {
+                                                                              Navigator.pop(context);
+                                                                              if (Subject != null) {
+                                                                                Report NewReport = Report(Subject: Subject!, ReportedCommentID: currentComment.CommentID,
+                                                                                ReportedCommentContent: currentComment.Content);
+                                                                                FirebaseFirestore.instance.collection("reports").add(NewReport.ToMap());
+                                                                                Subject = null;
+                                                                                PlatformSensitiveAlertDialog(
+                                                                                  title: "Başarılı",
+                                                                                  content: "Rapor incelenmek üzere gönderildi",
+                                                                                  mainButtonText: "Tamam",
+                                                                                ).show(context);
+                                                                              }
+                                                                            },
+                                                                            child:
+                                                                                const Text("Gönder"))
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            });
+                                                      },
+                                                    )
+                                                  ];
+                                                },
+                                              ),
                                               onLongPress: () {
                                                 if (currentComment.OwnerID ==
                                                         _usermodel

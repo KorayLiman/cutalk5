@@ -68,7 +68,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/KakaoTalk_48px.png"
+  image_path: "assets/images/ctlkresim2.png"
   remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
