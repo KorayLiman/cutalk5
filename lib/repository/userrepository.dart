@@ -6,7 +6,7 @@ import 'package:ctlk2/services/authbase.dart';
 import 'package:ctlk2/services/firebase_storage_service.dart';
 import 'package:ctlk2/services/firebaseauthservice.dart';
 import 'package:ctlk2/services/firestore_db_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class UserRepository implements AuthBase {
   final FirebaseAuthService _firebaseAuthService =

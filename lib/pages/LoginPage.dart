@@ -4,11 +4,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/pages/GeneralPage.dart';
 import 'package:ctlk2/pages/PasswordResetPage.dart';
-import 'package:ctlk2/services/applesignin.dart';
+
 import 'package:ctlk2/viewmodels/usermodel.dart';
 import 'package:ctlk2/widgets/Eulawidget.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
-import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

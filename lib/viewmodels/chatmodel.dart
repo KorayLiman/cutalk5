@@ -4,7 +4,7 @@ import 'package:ctlk2/models/user.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/repository/chatrepository.dart';
 import 'package:ctlk2/services/dbbase.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 
 class ChatModel with ChangeNotifier implements DBBase {

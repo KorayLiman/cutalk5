@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:ctlk2/pages/Profile_Page.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
@@ -8,11 +8,11 @@ import 'package:ctlk2/widgets/PlatformSensitiveAlertDialog.dart';
 import 'package:ctlk2/widgets/PlatformSensitiveDeleteButton.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:io';
+
 import 'package:provider/provider.dart';
 
 class GeneralPage extends StatefulWidget {
