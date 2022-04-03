@@ -459,12 +459,16 @@ class _DetailsPageState extends State<DetailsPage> {
                                                             context: context,
                                                             builder: (context) {
                                                               return Padding(
-                                                                padding: const EdgeInsets
-                                                                        .only(
-                                                                    left: 30.0,
-                                                    right: 30,
-                                                    top: 50,
-                                                    bottom: 300),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            30.0,
+                                                                        right:
+                                                                            30,
+                                                                        top: 50,
+                                                                        bottom:
+                                                                            300),
                                                                 child: Material(
                                                                   borderRadius:
                                                                       BorderRadius
@@ -573,14 +577,23 @@ class _DetailsPageState extends State<DetailsPage> {
                                                               .CommentID)
                                                           .delete()
                                                           .then((value) {
+                                                        widget.chat
+                                                            .CommentCount = widget
+                                                                .chat
+                                                                .CommentCount! -
+                                                            1;
                                                         setState(() {});
                                                       });
                                                     },
                                                   ).show(context);
+                                                } else {
+                                                 SnackBar snackBar = SnackBar(
+                                                      content: Text(
+                                                          currentComment
+                                                              .OwnerEmail));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
                                                 }
-                                                widget.chat.CommentCount =
-                                                    widget.chat.CommentCount! -
-                                                        1;
                                               },
                                               subtitle:
                                                   FutureBuilder<CuTalkUser>(
@@ -809,6 +822,7 @@ class _DetailsPageState extends State<DetailsPage> {
               .set({"CommentCount": FieldValue.increment(1)},
                   SetOptions(merge: true));
           Comment com = Comment(
+            OwnerEmail: _usermodel.user!.Email,
             BelongingChatID: widget.chat.ChatID,
             Content: CommentString!,
             CommentID: Uuid().v4(),

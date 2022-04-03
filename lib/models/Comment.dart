@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class Comment {
   final String OwnerID;
   final String BelongingChatID;
   final String Content;
   final String CommentID;
+  final String OwnerEmail;
   final Timestamp? SentAt;
 
   Comment(
-      {required this.OwnerID,
+      {required this.OwnerEmail,required this.OwnerID,
       required this.CommentID,
       required this.BelongingChatID,
       required this.Content,
@@ -20,8 +20,9 @@ class Comment {
       "OwnerID": OwnerID,
       "SentAt": SentAt ?? FieldValue.serverTimestamp(),
       "BelongingChatID": BelongingChatID,
-      "CommentID":CommentID,
+      "CommentID": CommentID,
       "Content": Content,
+      "OwnerEmail":OwnerEmail
     };
   }
 
@@ -30,5 +31,6 @@ class Comment {
         SentAt = map["SentAt"],
         CommentID = map["CommentID"],
         BelongingChatID = map["BelongingChatID"],
+        OwnerEmail = map["OwnerEmail"],
         Content = map["Content"];
 }

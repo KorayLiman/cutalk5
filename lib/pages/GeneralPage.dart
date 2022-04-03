@@ -1,4 +1,3 @@
-
 import 'package:ctlk2/pages/Profile_Page.dart';
 import 'package:ctlk2/viewmodels/chatmodel.dart';
 import 'package:ctlk2/viewmodels/usermodel.dart';
@@ -126,7 +125,7 @@ class _GeneralPageState extends State<GeneralPage>
                             width: MediaQuery.of(context).size.width,
                             height: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(16)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
