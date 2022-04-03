@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.korayliman.cutalk1">
+    package="com.koray.realcutalk">
    <application
         android:label="ctlk2"
         android:name="${applicationName}"

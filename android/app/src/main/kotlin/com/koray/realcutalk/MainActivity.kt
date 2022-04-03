@@ -1,4 +1,4 @@
-package com.korayliman.cutalk1
+package com.koray.realcutalk
 
 import io.flutter.embedding.android.FlutterActivity
 

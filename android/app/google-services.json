@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:172690454475:android:9f61f4ca25da94f11fa84e",
+        "mobilesdk_app_id": "1:172690454475:android:f8e92b71356683a21fa84e",
         "android_client_info": {
-          "package_name": "com.korayliman.cutalk1"
+          "package_name": "com.koray.realcutalk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "172690454475-gnshgj0p1ulct3dqpv46j96m935a2mas.apps.googleusercontent.com",
+          "client_id": "172690454475-i0bteif5t3m849tu6gtpp1kk0k1kb93i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.korayliman.cutalk1",
+            "package_name": "com.koray.realcutalk",
             "certificate_hash": "542f0f7ba0ad091c56e687e5c22f6824835d2405"
           }
         },
