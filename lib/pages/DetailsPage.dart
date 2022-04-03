@@ -132,10 +132,11 @@ class _DetailsPageState extends State<DetailsPage> {
                                             context: context,
                                             builder: (context) {
                                               return Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 30.0,
-                                                        vertical: 80),
+                                                padding: const EdgeInsets.only(
+                                                    left: 30.0,
+                                                    right: 30,
+                                                    top: 50,
+                                                    bottom: 300),
                                                 child: Material(
                                                   borderRadius:
                                                       BorderRadius.circular(16),
@@ -146,7 +147,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                                             .width,
                                                     height: double.infinity,
                                                     decoration: BoxDecoration(
-                                                        color: Colors.grey.shade200,
+                                                        color: Colors
+                                                            .grey.shade200,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(16)),
@@ -458,11 +460,11 @@ class _DetailsPageState extends State<DetailsPage> {
                                                             builder: (context) {
                                                               return Padding(
                                                                 padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        30.0,
-                                                                    vertical:
-                                                                        80),
+                                                                        .only(
+                                                                    left: 30.0,
+                                                    right: 30,
+                                                    top: 50,
+                                                    bottom: 300),
                                                                 child: Material(
                                                                   borderRadius:
                                                                       BorderRadius
@@ -478,7 +480,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                         .infinity,
                                                                     decoration: BoxDecoration(
                                                                         color: Colors
-                                                                            .grey.shade200,
+                                                                            .grey
+                                                                            .shade200,
                                                                         borderRadius:
                                                                             BorderRadius.circular(16)),
                                                                     child:
@@ -526,8 +529,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                                 () async {
                                                                               Navigator.pop(context);
                                                                               if (Subject != null) {
-                                                                                Report NewReport = Report(Subject: Subject!, ReportedCommentID: currentComment.CommentID,
-                                                                                ReportedCommentContent: currentComment.Content);
+                                                                                Report NewReport = Report(Subject: Subject!, ReportedCommentID: currentComment.CommentID, ReportedCommentContent: currentComment.Content);
                                                                                 FirebaseFirestore.instance.collection("reports").add(NewReport.ToMap());
                                                                                 Subject = null;
                                                                                 PlatformSensitiveAlertDialog(
