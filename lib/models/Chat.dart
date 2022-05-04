@@ -13,17 +13,21 @@ class Chat {
   int? ViewCount;
   int? CommentCount;
   final bool IsPrivate;
+  int? LikeCount;
+  Map? Likes;
 
   Chat(
       {required this.Content,
       required this.ChatID,
       this.ChatImageContent,
       required this.OwnerId,
+      this.LikeCount,
       this.ImageCount,
       required this.OwnerProfileUrl,
       required this.OwnerName,
       required this.OwnerEmail,
       this.CommentCount,
+      this.Likes,
       this.PostedAt,
       this.ViewCount,
       required this.IsPrivate});
@@ -34,12 +38,14 @@ class Chat {
       "ChatImageContent": ChatImageContent ?? <String>[],
       "UserName": OwnerName,
       "Email": OwnerEmail,
+      "Likes": Likes?? <String,bool>{},
       "OwnerProfileUrl": OwnerProfileUrl,
-      "ImageCount": ImageCount?? 0,
+      "ImageCount": ImageCount ?? 0,
       "Content": Content,
       "PostedAt": PostedAt ?? FieldValue.serverTimestamp(),
       "ViewCount": ViewCount ?? 0,
       "CommentCount": CommentCount ?? 0,
+      "LikeCount": LikeCount ?? 0,
       "IsPrivate": IsPrivate,
       "ChatID": ChatID
     };
@@ -49,6 +55,7 @@ class Chat {
       : OwnerName = map["UserName"],
         ChatImageContent = map["ChatImageContent"].cast<String>(),
         OwnerId = map["OwnerId"],
+        Likes = map["Likes"],
         OwnerEmail = map["Email"],
         ImageCount = map["ImageCount"],
         OwnerProfileUrl = map["OwnerProfileUrl"],
@@ -56,6 +63,7 @@ class Chat {
         PostedAt = map["PostedAt"],
         ViewCount = map["ViewCount"],
         CommentCount = map["CommentCount"],
+        LikeCount = map["LikeCount"],
         IsPrivate = map["IsPrivate"],
         ChatID = map["ChatID"];
 }

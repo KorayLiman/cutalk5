@@ -579,15 +579,7 @@ class _LoginPageState extends State<LoginPage> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      EulaButton(
-        content: "1- Küfür ve hakaret içerikli paylaşımlar yasaktır.\n" +
-            "2- Vahşet, çıplaklık ve ahlak dışı paylaşımlar(fotoğraf, sohbet, yorum) yasaktır.\n" +
-            "3- Yukarıda belirtilen şartlara aykırı davranışta bulunan kişilerin hesapları engellenir",
-        secondaryButtonText: "Kabul etmiyorum",
-        mainButtonText: "Kabul ediyorum",
-        title: "Şartlar",
-        callback: () async {
-          Navigator.pop(context);
+      
 
           if (formType == FormType.login) {
             if (email == null ||
@@ -652,8 +644,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
           }
-        },
-      ).show(context);
+        
     } else
       PlatformSensitiveAlertDialog(
               title: "İnternet yok",

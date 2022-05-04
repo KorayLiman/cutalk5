@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctlk2/SwearBlocker.dart';
+import 'package:ctlk2/models/Block.dart';
 import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/models/Comment.dart';
 import 'package:ctlk2/models/Reports.dart';
@@ -36,6 +37,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   final DateFormat formatter = DateFormat('dd/MM/yyyy');
   final ImagePicker _picker = ImagePicker();
+  late bool isLiked;
 
   List<File> Imgs = [];
   String? Subject;
@@ -45,6 +47,7 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     final _chatmodel = Provider.of<ChatModel>(context);
     final _usermodel = Provider.of<UserModel>(context);
+    isLiked = (widget.chat.Likes![_usermodel.user!.UserID] == true);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey.shade100,
@@ -205,13 +208,16 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                   context);
                                                               if (Subject !=
                                                                   null) {
-                                                                Report NewReport = Report(
-                                                                    Subject:
-                                                                        Subject!,
-                                                                    ReportedChatID:
-                                                                        widget
-                                                                            .chat
-                                                                            .ChatID);
+                                                                Report
+                                                                    NewReport =
+                                                                    Report(
+                                                                  Subject:
+                                                                      Subject!,
+                                                                  ReportedChatID:
+                                                                      widget
+                                                                          .chat
+                                                                          .ChatID,
+                                                                );
                                                                 FirebaseFirestore
                                                                     .instance
                                                                     .collection(
@@ -238,7 +244,94 @@ class _DetailsPageState extends State<DetailsPage> {
                                               );
                                             });
                                       },
-                                    )
+                                    ),
+                                    PopupMenuItem(
+                                      child: Text("Blokla",
+                                          style: GoogleFonts.ubuntu(
+                                              color: Colors.orange)),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return Container();
+                                            });
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return PlatformSensitiveDeleteButton(
+                                                title: "Blokla",
+                                                callback: () async {
+                                                  await showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return PlatformSensitiveDeleteButton(
+                                                          title: "Emin misiniz",
+                                                          callback: () async {
+                                                            Block block = Block(
+                                                                ReportedUserID:
+                                                                    widget.chat
+                                                                        .OwnerId,
+                                                                ReportedChatID:
+                                                                    widget.chat
+                                                                        .ChatID,
+                                                                ReportingUserID:
+                                                                    _usermodel
+                                                                        .user!
+                                                                        .UserID);
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "blocks")
+                                                                .add(block
+                                                                    .ToMap());
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "users")
+                                                                .doc(widget.chat
+                                                                    .OwnerId)
+                                                                .set(
+                                                                    {
+                                                                  "IsBlocked":
+                                                                      true
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                            await PlatformSensitiveAlertDialog(
+                                                                    title:
+                                                                        "Başarılı",
+                                                                    content:
+                                                                        "Kullanıcı başarıyla bloklandı",
+                                                                    mainButtonText:
+                                                                        "Tamam")
+                                                                .show(context);
+                                                          },
+                                                          content:
+                                                              "Gerçekten bloklamak istiyor musunuz? ",
+                                                          mainButtonText:
+                                                              "Evet",
+                                                          secondaryButtonText:
+                                                              "Hayır",
+                                                          mainButtonColor:
+                                                              Colors.red,
+                                                        );
+                                                      });
+                                                },
+                                                content:
+                                                    "Dikkat!!! Sadece gerekli durumlarda bloklayınız. Kötüye kullanımda(Gereksiz bloklama vb) bloklayan kullanıcı engellenir ",
+                                                mainButtonText: "Blokla",
+                                                secondaryButtonText: "Vazgeç",
+                                                mainButtonColor: Colors.red,
+                                              );
+                                            });
+                                      },
+                                    ),
                                   ];
                                 },
                               ),
@@ -360,20 +453,37 @@ class _DetailsPageState extends State<DetailsPage> {
                                       color: Colors.grey.shade800),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.comment,
-                                        color: Colors.grey.shade800),
-                                    Text(
-                                      widget.chat.CommentCount.toString(),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        HandleLikePosts();
+                                      },
+                                      icon: Icon(
+                                        isLiked
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: Colors.pink,
+                                      )),
+                                  Text(widget.chat.LikeCount.toString(),
                                       style: GoogleFonts.ubuntu(
-                                          color: Colors.grey.shade800),
-                                    )
-                                  ],
-                                ),
-                              )
+                                        color: Colors.grey.shade800,
+                                      )),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Icon(Icons.comment,
+                                      color: Colors.grey.shade800),
+                                  Text(
+                                    widget.chat.CommentCount.toString(),
+                                    style: GoogleFonts.ubuntu(
+                                        color: Colors.grey.shade800),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         )),
@@ -552,7 +662,71 @@ class _DetailsPageState extends State<DetailsPage> {
                                                               );
                                                             });
                                                       },
-                                                    )
+                                                    ),
+                                                    PopupMenuItem(
+                                                      child: Text("Blokla",
+                                                          style: GoogleFonts
+                                                              .ubuntu(
+                                                                  color: Colors
+                                                                      .orange)),
+                                                      onTap: () async {
+                                                        Navigator.pop(context);
+                                                        await showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Container();
+                                                            });
+                                                        await showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return PlatformSensitiveDeleteButton(
+                                                                title: "Blokla",
+                                                                callback:
+                                                                    () async {
+                                                                  await showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) {
+                                                                        return PlatformSensitiveDeleteButton(
+                                                                          title:
+                                                                              "Emin misiniz",
+                                                                          callback:
+                                                                              () async {
+                                                                            Block
+                                                                                block =
+                                                                                Block(ReportedUserID: currentComment.OwnerID, ReportedCommentContent: currentComment.Content, ReportingUserID: _usermodel.user!.UserID);
+                                                                            await FirebaseFirestore.instance.collection("blocks").add(block.ToMap());
+                                                                            await FirebaseFirestore.instance.collection("users").doc(widget.chat.OwnerId).set({
+                                                                              "IsBlocked": true
+                                                                            }, SetOptions(merge: true));
+                                                                            Navigator.pop(context);
+                                                                            Navigator.pop(context);
+                                                                            await PlatformSensitiveAlertDialog(title: "Başarılı", content: "Kullanıcı başarıyla bloklandı", mainButtonText: "Tamam").show(context);
+                                                                          },
+                                                                          content:
+                                                                              "Gerçekten bloklamak istiyor musunuz? ",
+                                                                          mainButtonText:
+                                                                              "Evet",
+                                                                          secondaryButtonText:
+                                                                              "Hayır",
+                                                                          mainButtonColor:
+                                                                              Colors.red,
+                                                                        );
+                                                                      });
+                                                                },
+                                                                content:
+                                                                    "Dikkat!!! Sadece gerekli durumlarda bloklayınız. Kötüye kullanımda(Gereksiz bloklama vb) bloklayan kullanıcı engellenir ",
+                                                                mainButtonText:
+                                                                    "Blokla",
+                                                                secondaryButtonText:
+                                                                    "Vazgeç",
+                                                                mainButtonColor:
+                                                                    Colors.red,
+                                                              );
+                                                            });
+                                                      },
+                                                    ),
                                                   ];
                                                 },
                                               ),
@@ -587,7 +761,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                     },
                                                   ).show(context);
                                                 } else {
-                                                 SnackBar snackBar = SnackBar(
+                                                  SnackBar snackBar = SnackBar(
                                                       content: Text(
                                                           currentComment
                                                               .OwnerEmail));
@@ -691,7 +865,16 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: IconButton(
                               color: const Color.fromRGBO(88, 117, 251, 1),
                               onPressed: () {
-                                _UploadComment();
+                                if (_usermodel.user!.IsBlocked == false) {
+                                  _UploadComment();
+                                } else {
+                                  PlatformSensitiveAlertDialog(
+                                    title: "Bloklandınız",
+                                    content:
+                                        "Bir Kullanıcı tarafından kötüye kullanım sebebiyle bloklandınız. Gereksiz yere bloklandığınızı düşünüyorsanız uygulama içerisindeki Hata ve görüş bildir kısmından ulaşabilirsiniz",
+                                    mainButtonText: "Tamam",
+                                  ).show(context);
+                                }
                               },
                               icon: Icon(
                                 Icons.send,
@@ -808,7 +991,7 @@ class _DetailsPageState extends State<DetailsPage> {
     if (CommentString != null && CommentString!.length > 0) {
       bool ContainsSwear = false;
       SwearBlockerClass.SwearBlocker.forEach((element) {
-        if (element.length > 2) {
+        if (element.length > 3) {
           if (CommentString!.toLowerCase().contains(element)) {
             ContainsSwear = true;
           }
@@ -821,6 +1004,7 @@ class _DetailsPageState extends State<DetailsPage> {
               .doc(widget.chat.ChatID)
               .set({"CommentCount": FieldValue.increment(1)},
                   SetOptions(merge: true));
+
           Comment com = Comment(
             OwnerEmail: _usermodel.user!.Email,
             BelongingChatID: widget.chat.ChatID,
@@ -893,6 +1077,46 @@ class _DetailsPageState extends State<DetailsPage> {
         await _usermodel.uploadChatFile(
             _usermodel.user!.UserID, "chatimage", i, widget.chat.ChatID);
       }
+    }
+  }
+
+  void HandleLikePosts() async {
+    final _usermodel = Provider.of<UserModel>(context, listen: false);
+
+    String currentUserId = _usermodel.user!.UserID;
+    // DocumentSnapshot doc = await FirebaseFirestore.instance
+    //     .collection("chats")
+    //     .doc(widget.chat.ChatID)
+    //     .get();
+    // Map LikesMap = doc["Likes"] as Map<String, dynamic>;
+    bool _IsLiked = (widget.chat.Likes![currentUserId] == true);
+    if (_IsLiked) {
+      widget.chat.Likes![currentUserId] = false;
+      isLiked = false;
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(widget.chat.ChatID)
+          .update({"Likes.$currentUserId": false});
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(widget.chat.ChatID)
+          .set(
+              {"LikeCount": FieldValue.increment(-1)}, SetOptions(merge: true));
+      widget.chat.LikeCount = widget.chat.LikeCount! - 1;
+      setState(() {});
+    } else {
+      widget.chat.Likes![currentUserId] = true;
+      isLiked = true;
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(widget.chat.ChatID)
+          .update({"Likes.$currentUserId": true});
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(widget.chat.ChatID)
+          .set({"LikeCount": FieldValue.increment(1)}, SetOptions(merge: true));
+      widget.chat.LikeCount = widget.chat.LikeCount! + 1;
+      setState(() {});
     }
   }
 }

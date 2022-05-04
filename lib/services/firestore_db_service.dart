@@ -129,4 +129,32 @@ class FireStoreDBService implements DBBase {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .delete();
   }
+
+  Future<List<Chat>> GetMostCommentedChats(bool isUniversityChat) async {
+    List<Chat> ChatList = [];
+    QuerySnapshot snapshot = await _firestore
+        .collection("chats")
+        .where("IsPrivate", isEqualTo: isUniversityChat)
+        .orderBy("CommentCount", descending: true)
+        .get();
+    for (var chat in snapshot.docs) {
+      Chat ch = Chat.fromMap(chat.data() as Map<String, dynamic>);
+      ChatList.add(ch);
+    }
+    return ChatList;
+  }
+
+  Future<List<Chat>> GetMostPopularChats(bool isUniversityChat) async {
+    List<Chat> ChatList = [];
+    QuerySnapshot snapshot = await _firestore
+        .collection("chats")
+        .where("IsPrivate", isEqualTo: isUniversityChat)
+        .orderBy("LikeCount", descending: true)
+        .get();
+        for (var chat in snapshot.docs) {
+      Chat ch = Chat.fromMap(chat.data() as Map<String, dynamic>);
+      ChatList.add(ch);
+    }
+    return ChatList;
+  }
 }

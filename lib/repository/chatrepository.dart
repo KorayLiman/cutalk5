@@ -5,7 +5,6 @@ import 'package:ctlk2/models/Chat.dart';
 import 'package:ctlk2/services/dbbase.dart';
 import 'package:ctlk2/services/firestore_db_service.dart';
 
-
 class ChatRepository implements DBBase {
   final FireStoreDBService _fireStoreDBService = locator<FireStoreDBService>();
 
@@ -56,7 +55,17 @@ class ChatRepository implements DBBase {
   }
 
   @override
-  Future<void> DeleteAccount() async{
-    
+  Future<void> DeleteAccount() async {}
+
+  Future<List<Chat>> GetMostCommentedChats(bool isUniversityChat) async {
+    List<Chat> ChatList =
+        await _fireStoreDBService.GetMostCommentedChats(isUniversityChat);
+    return ChatList;
+  }
+
+  Future<List<Chat>> GetMostPopularChats(bool isUniversityChat) async {
+    List<Chat> ChatList =
+        await _fireStoreDBService.GetMostPopularChats(isUniversityChat);
+    return ChatList;
   }
 }

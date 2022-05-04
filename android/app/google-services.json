@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "172690454475-mpbnk5m9nrb9seuvrkamokqkrbpvht3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.koray.realcutalk",
+            "certificate_hash": "3375a3b06ed9cfb882afb0928a2c8a23e78a98e5"
+          }
+        },
+        {
           "client_id": "172690454475-ovpp7gt00hg2j0ivknuq8pl0t5avni2a.apps.googleusercontent.com",
           "client_type": 3
         }

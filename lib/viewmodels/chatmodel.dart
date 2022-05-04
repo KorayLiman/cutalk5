@@ -85,7 +85,14 @@ class ChatModel with ChangeNotifier implements DBBase {
   }
 
   @override
-  Future<void> DeleteAccount() async{
-   
+  Future<void> DeleteAccount() async {}
+
+  Future<List<Chat>> GetMostPopularChats(bool IsUniversityChat) async {
+    return await _chatRepository.GetMostPopularChats(IsUniversityChat);
+    return [];
+  }
+
+  Future<List<Chat>> GetMostCommentedChats(bool IsUniversityChat) async {
+    return await _chatRepository.GetMostCommentedChats(IsUniversityChat);
   }
 }

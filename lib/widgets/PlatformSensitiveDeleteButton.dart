@@ -1,29 +1,30 @@
 import 'dart:io';
 
-
 import 'package:ctlk2/widgets/PlatformSensitiveWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
   final String title;
   final String content;
   final String mainButtonText;
   final String secondaryButtonText;
- 
+  final MaterialColor? mainButtonColor;
+  final MaterialColor? secondaryButtonColor;
+
   final VoidCallback callback;
 
   PlatformSensitiveDeleteButton(
       {required this.title,
-      
       required this.callback,
+      this.mainButtonColor,
+      this.secondaryButtonColor,
       required this.content,
       required this.mainButtonText,
       required this.secondaryButtonText});
 
   Future<void> show(BuildContext context) async {
-     Platform.isIOS
+    Platform.isIOS
         ? await showCupertinoDialog(
             context: context, builder: (context) => this)
         : await showDialog(context: context, builder: (context) => this);
@@ -51,31 +52,33 @@ class PlatformSensitiveDeleteButton extends PlatformSensitiveWidget {
     final AllButtons = <Widget>[];
     if (Platform.isIOS) {
       AllButtons.add(CupertinoDialogAction(
-          child: Text(secondaryButtonText),
+          child: Text(secondaryButtonText,
+              style: TextStyle(color: secondaryButtonColor ?? Colors.blue)),
           onPressed: () {
-            Navigator.of(context).pop(true);
+             Navigator.pop(context);
           }));
       AllButtons.add(CupertinoDialogAction(
-        child: Text(mainButtonText),
+        child: Text(
+          mainButtonText,
+          style: TextStyle(color: mainButtonColor ?? Colors.blue),
+        ),
         onPressed: () {
-          
-           callback();
-          Navigator.pop(context);
+          callback();
         },
       ));
     } else {
       AllButtons.add(TextButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
-          },
-          child: Text(secondaryButtonText)));
-      AllButtons.add(TextButton(
-          onPressed: () {
-            
-               callback();
             Navigator.pop(context);
           },
-          child: Text(mainButtonText)));
+          child: Text(secondaryButtonText,
+              style: TextStyle(color: secondaryButtonColor ?? Colors.blue))));
+      AllButtons.add(TextButton(
+          onPressed: () {
+            callback();
+          },
+          child: Text(mainButtonText,
+              style: TextStyle(color: mainButtonColor ?? Colors.blue))));
     }
     return AllButtons;
   }

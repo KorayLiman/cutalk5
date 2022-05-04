@@ -3,10 +3,12 @@ class CuTalkUser {
   final bool IsFromUniversity;
   String Email;
   String? UserName;
+  bool IsBlocked;
   String? ProfileURL;
   CuTalkUser({
     required this.UserID,
     required this.Email,
+    required this.IsBlocked,
     required this.IsFromUniversity,
     this.UserName,
     this.ProfileURL,
@@ -15,18 +17,20 @@ class CuTalkUser {
   Map<String, dynamic> ToMap() {
     return {
       "UserID": UserID,
-      "IsFromUniversity":IsFromUniversity,
+      "IsFromUniversity": IsFromUniversity,
       "Email": Email,
+      "IsBlocked": IsBlocked,
       "UserName": UserName ?? "Apple User",
       "ProfileURL": ProfileURL ??
-          "https://scontent.fist4-1.fna.fbcdn.net/v/t1.6435-9/33248868_2139061783009197_3860205585035165696_n.png?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=ESP2-TU7d68AX-7r8Lg&_nc_ht=scontent.fist4-1.fna&oh=00_AT_kNqR2wFyPzFibQCpC57MtmhAdlwqFfI-x6RnpHVqGlA&oe=626945C9"
+          "https://static.wixstatic.com/media/26e925_dbd5b81fa3614bfc82f5fdea0566f7de~mv2.png/v1/fill/w_45,h_45,al_c,lg_1,q_90/26e925_dbd5b81fa3614bfc82f5fdea0566f7de~mv2.webp"
     };
   }
 
   CuTalkUser.FromMap(Map<String, dynamic> map)
       : UserID = map["UserID"],
-      IsFromUniversity = map["IsFromUniversity"],
+        IsFromUniversity = map["IsFromUniversity"],
         Email = map["Email"],
+        IsBlocked = map["IsBlocked"],
         UserName = map["UserName"],
         ProfileURL = map["ProfileURL"];
 }

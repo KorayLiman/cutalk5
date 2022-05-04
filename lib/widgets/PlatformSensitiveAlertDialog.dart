@@ -8,14 +8,16 @@ class PlatformSensitiveAlertDialog extends PlatformSensitiveWidget {
   final String title;
   final String content;
   final String mainButtonText;
+  
 
   PlatformSensitiveAlertDialog(
       {required this.title,
       required this.content,
+   
       required this.mainButtonText});
 
   Future<void> show(BuildContext context) async {
-     Platform.isIOS
+    Platform.isIOS
         ? await showCupertinoDialog(
             context: context, builder: (context) => this)
         : await showDialog(context: context, builder: (context) => this);

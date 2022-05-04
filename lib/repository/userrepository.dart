@@ -96,8 +96,9 @@ class UserRepository implements AuthBase {
   }
 
   DeleteAccount() async {
-    await _fireStoreDBService.DeleteAccount();
     await _firebaseAuthService.DeleteAccount();
+    await _fireStoreDBService.DeleteAccount();
+    
     
   }
 }

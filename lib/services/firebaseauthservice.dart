@@ -68,7 +68,7 @@ class FirebaseAuthService implements AuthBase {
         url = fbuser["ProfileURL"].toString();
       else
         url = null;
-      return CuTalkUser(
+      return CuTalkUser(IsBlocked: false,
           UserID: user.uid,
           Email: user.email!,
           ProfileURL: url,

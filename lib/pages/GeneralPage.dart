@@ -26,6 +26,7 @@ class _GeneralPageState extends State<GeneralPage>
   late TabController _tabController;
   String? Subject, Content;
   int CurrentIndex = 0;
+  
 
   @override
   void initState() {
@@ -232,6 +233,7 @@ class _GeneralPageState extends State<GeneralPage>
                   PlatformSensitiveDeleteButton(
                           title: "Hesabımı sil",
                           callback: () async {
+                            Navigator.pop(context);
                             await _usermodel.DeleteAccount();
                             await _usermodel.signOut();
                           },
@@ -244,7 +246,7 @@ class _GeneralPageState extends State<GeneralPage>
                 child: Text(
                   "Hesabımı sil",
                   style: GoogleFonts.ubuntu(color: Colors.red),
-                ))
+                )),
           ],
         )),
         backgroundColor: Colors.grey.shade100,
@@ -289,6 +291,7 @@ class _GeneralPageState extends State<GeneralPage>
                                   fontSize: 16,
                                   color: Colors.white),
                             ),
+                          
                           ],
                         ),
                       ),
@@ -307,7 +310,7 @@ class _GeneralPageState extends State<GeneralPage>
                           //     )),
                         ],
                       ),
-                    )
+                    ),
                   ],
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
