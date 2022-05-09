@@ -64,6 +64,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                 }
                               });
                               if (ContainsSwear == false) {
+                                _textEditingController.clear();
                                 Chat ch = Chat(
                                     Content: value,
                                     ChatID:
@@ -110,7 +111,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
               PlatformSensitiveAlertDialog(
                 title: "Email onayı",
                 content:
-                    "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız. Daha sonra çıkış yapıp tekrar giriniz",
+                    "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız. Daha sonra çıkış yapıp tekrar giriniz. DİKKAT EMAIL ONAYI SPAM KUTUSUNA GİDEBİLİR LÜTFEN SPAM KUTUSUNU KONTROL EDİNİZ.",
                 mainButtonText: "Tamam",
               ).show(context);
             }
@@ -213,7 +214,7 @@ class _DiscussionGeneralState extends State<DiscussionGeneral> {
                                           .collection("chats")
                                           .doc(CurrentChat.ChatID)
                                           .delete();
-
+                                      
                                       setState(() {});
                                     },
                                     content: "Sohbeti silmek istiyor musunuz?",

@@ -70,6 +70,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                                     }
                                   });
                                   if (ContainsSwear == false) {
+                                    _textEditingController.clear();
                                     Chat ch = Chat(
                                         Content: value,
                                         ChatID: _usermodel.user!.UserName
@@ -117,7 +118,7 @@ class _DiscussionPrivateState extends State<DiscussionPrivate> {
                   PlatformSensitiveAlertDialog(
                     title: "Email onayı",
                     content:
-                        "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız. Daha sonra çıkış yapıp tekrar giriniz",
+                        "Sohbet oluşturmak için mail adresinize gelen onay linkini tıklayınız. Daha sonra çıkış yapıp tekrar giriniz. DİKKAT EMAIL ONAYI SPAM KUTUSUNA GİDEBİLİR LÜTFEN SPAM KUTUSUNU KONTROL EDİNİZ.",
                     mainButtonText: "Tamam",
                   ).show(context);
                 }

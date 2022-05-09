@@ -299,6 +299,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                                                     SetOptions(
                                                                         merge:
                                                                             true));
+                                                                            
                                                             Navigator.pop(
                                                                 context);
                                                             Navigator.pop(
@@ -905,6 +906,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         .set({
                                       "CommentCount": FieldValue.increment(1)
                                     }, SetOptions(merge: true));
+                                    
                                     await _UploadComment();
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
@@ -915,7 +917,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                     PlatformSensitiveAlertDialog(
                                       title: "Mail Onayı",
                                       content:
-                                          "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                          "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın. Daha sonra çıkış yapıp tekrar giriniz. DİKKAT EMAIL ONAYI SPAM KUTUSUNA GİDEBİLİR LÜTFEN SPAM KUTUSUNU KONTROL EDİNİZ.",
                                       mainButtonText: "Tamam",
                                     ).show(context);
                                   }
@@ -954,7 +956,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   PlatformSensitiveAlertDialog(
                                     title: "Mail Onayı",
                                     content:
-                                        "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın",
+                                        "Lütfen yorum yazmak için mailinize gelen onay linkine tıklayın. Daha sonra çıkış yapıp tekrar giriniz. DİKKAT EMAIL ONAYI SPAM KUTUSUNA GİDEBİLİR LÜTFEN SPAM KUTUSUNU KONTROL EDİNİZ.",
                                     mainButtonText: "Tamam",
                                   ).show(context);
                                 }
